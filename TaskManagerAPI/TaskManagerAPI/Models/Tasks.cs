@@ -13,6 +13,14 @@ namespace TaskManagerAPI.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public string Status { get; set; }
+
         public int Priority { get; set; }
+
+        public int UserID { get; set; }
+        public User User { get; set; }
+
+        public int ProjectID { get; set; }
+        public Project Project { get; set; }
     }
 }

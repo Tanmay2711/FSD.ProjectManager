@@ -12,5 +12,10 @@ namespace TaskManagerAPI.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Priority { get; set; }
+
+        public IList<Tasks> Tasks { get; set; }
+
+        public int ManagerID { get; set; }
+        public User Manager { get; set; }
     }
 }
