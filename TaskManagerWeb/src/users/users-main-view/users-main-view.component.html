@@ -2,7 +2,7 @@
 <br>
 <br>
 <hr style="border-top: dotted 1px;" />
-<div class="form-group">
+<div *ngIf="showSearchControls==true" class="form-group">
 <input type="text" style="display: inline; width: 30%" [(ngModel)]="searchValue" (keyup)="onKeyUp($event)" placeholder="Search..." class="form-control addTaskTextInput"> 
 <label class="addTaskLables" style="margin-left: 1%">Sort :</label> 
 <button class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('firstName')">First Name</button> 

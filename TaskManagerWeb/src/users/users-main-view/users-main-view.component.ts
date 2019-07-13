@@ -12,6 +12,7 @@ export class UsersMainViewComponent implements OnInit {
   tempUserList:Array<any>
   searchValue : string
   userService:UsersService
+  showSearchControls:boolean = false
   constructor(userSer:UsersService) { 
     this.userService = userSer;
     this.searchValue = '';
@@ -26,6 +27,7 @@ export class UsersMainViewComponent implements OnInit {
     console.log(user);
     this.userList.push(user);
     this.tempUserList.push(user);
+    this.showSearchControls = true;
     this.onKeyUp('');
   }
 
@@ -33,6 +35,7 @@ export class UsersMainViewComponent implements OnInit {
     this.userService.get().subscribe((userlist:Array<any>) => {
       this.userList = userlist;
       this.tempUserList = userlist;
+      this.showSearchControls = userlist.length > 0;
     });
   }
 
