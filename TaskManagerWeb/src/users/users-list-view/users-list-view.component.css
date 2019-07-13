@@ -1,0 +1,31 @@
+table {
+    margin-top: 1.5em;
+}
+
+td.highlightedGray
+{
+    padding: 30px;
+    background: lightgray;
+    width: 200px;
+    text-align: left;
+}
+
+td{
+    padding: 30px
+}
+
+th
+{
+    font-size: small;
+    font-weight: bold;
+}
+
+.whiteThickLeftBorder
+{
+   border-left:  20px solid white
+}
+
+.cutombutton {
+    min-width: 75px;
+    max-width: 75px;
+}

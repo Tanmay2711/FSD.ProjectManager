@@ -1,1 +1,6 @@
-<users-add-user></users-add-user>
+<users-add-user (addedUser)="userAdded($event)"></users-add-user>
+<br>
+<br>
+<hr style="border-top: dotted 1px;" />
+
+<app-users-list-view [userList]="userList"></app-users-list-view>

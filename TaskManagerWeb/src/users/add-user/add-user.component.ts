@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UsersService } from '../users.service';
 
 @Component({
@@ -9,6 +9,7 @@ import { UsersService } from '../users.service';
 export class AddUserComponent implements OnInit {
   userInfo:any
   userService:UsersService
+  @Output() addedUser = new EventEmitter<any>();
   constructor(
     userSer:UsersService
   ) { 
@@ -23,11 +24,10 @@ export class AddUserComponent implements OnInit {
     let userPayLoad = Object.assign({},this.userInfo);
     console.log(userPayLoad);
     this.userService.add(userPayLoad).subscribe(
-      (data:any) => {
+      (userData:any) => {
         console.log("User Added");
-        // this.taskData.push(data);
          this.resetClicked(null);
-        // this.navigateToViewTask();
+         this.addedUser.emit(userData);
       }
 
     );
