@@ -1,0 +1,15 @@
+input.addTaskTextInput
+{
+  background-color: lightgray
+}
+
+label.addTaskLables
+{
+  font-size: small;
+  font-weight: bold;
+}
+
+button.leftMarginButtons
+{
+    margin-left: 2%
+}
