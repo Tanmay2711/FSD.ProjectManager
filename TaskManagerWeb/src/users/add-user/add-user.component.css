@@ -1,0 +1,25 @@
+input.halfWidth, div.halfOfScreen
+{
+    width: 50%
+}
+
+label.addTaskLables
+{
+  font-size: small;
+  font-weight: bold;
+}
+
+input.addTaskTextInput
+{
+  background-color: lightgray
+}
+
+.example-form {
+min-width: 150px;
+max-width: 500px;
+width: 100%;
+}
+
+.example-full-width {
+width: 100%;
+}

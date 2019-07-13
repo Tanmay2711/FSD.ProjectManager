@@ -17,6 +17,7 @@ import { AddTaskComponent } from './add-task/add-task.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskService } from './task.service';
 import { GridTaskViewComponent } from './grid-task-view/grid-task-view.component';
+import {UsersModule} from '../users/users.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { GridTaskViewComponent } from './grid-task-view/grid-task-view.component
     MatDatepickerModule,
     MatNativeDateModule,
     MatTooltipModule,
-    AppRoutingModule
+    AppRoutingModule,
+    UsersModule
   ],
   providers: [TaskService],
   bootstrap: [AppComponent]
