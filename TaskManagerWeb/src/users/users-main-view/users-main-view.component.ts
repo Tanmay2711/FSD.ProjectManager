@@ -44,9 +44,9 @@ export class UsersMainViewComponent implements OnInit {
 
   onSeachBtnClick(trigger){
     if(trigger === 'firstName'){
-      this.userList = _.sortBy(this.userList, (u) => u.firstName);
+      this.userList = _.sortBy(this.userList, (u) => u.firstName.toLowerCase());
     }else if (trigger === 'lastName'){
-      this.userList = _.sortBy(this.userList, (u) => u.lastName);
+      this.userList = _.sortBy(this.userList, (u) => u.lastName.toLowerCase());
     } else if (trigger === 'id'){
       this.userList = _.sortBy(this.userList, (u) => u.employeeID);
     }
