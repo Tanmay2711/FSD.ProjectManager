@@ -21,7 +21,8 @@
           </div>
         </div>
 
-        <input type="checkbox" name="isstartdateenddate" id="selectisdate" [(ngModel)]="isStartDatEndDate"><label style="margin-left: 10px" class="addTaskLables" for="selectisdate"> Set Start and End Date</label>
+        <input type="checkbox" name="isstartdateenddate" id="selectisdate" [(ngModel)]="isStartDatEndDate" (change)="onIsStartDatEndDateChange(isStartDatEndDate)">
+        <label style="margin-left: 10px" class="addTaskLables" for="selectisdate"> Set Start and End Date</label>
     <!-- </div>
     <div class="form-group"> -->
         <!-- <label for="enddate-input" class="addTaskLables">End Date:</label> -->

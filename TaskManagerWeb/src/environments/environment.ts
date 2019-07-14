@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   accessPointUrl:'http://localhost:55772/api/tasks',
-  usersServiceUrl:'http://localhost:55772/api/users'
+  usersServiceUrl:'http://localhost:55772/api/users',
+  projectServiceUrl:'http://localhost:55772/api/projects'
 };
 
 /*

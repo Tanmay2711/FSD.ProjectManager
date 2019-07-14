@@ -4,6 +4,8 @@ import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { UsersService } from 'src/users/users.service';
+import * as _ from 'lodash';
+import { ProjectsService } from '../projects.service';
 
 @Component({
   selector: 'app-add-project',
@@ -16,13 +18,15 @@ export class AddProjectComponent implements OnInit {
   userList:Array<any>;
   projectInfo:any;
   ToolTipText: string = "0";
-  constructor(private userService:UsersService) { 
+  constructor(private userService:UsersService,
+    private projectService:ProjectsService) { 
     this.projectInfo = {
       projectID:0,
-      projectName:'',
-      startDate:'',
-      endDate:'',
+      projectName:null,
+      startDate:null,
+      endDate:null,
       priority:0,
+      managerID:0,
       manager:{
         userId:0,
         firstName:'',
@@ -63,14 +67,25 @@ export class AddProjectComponent implements OnInit {
 
   addOrUpdateProjectRecord($event){
     console.log(this.projectInfo);
+    let projectPayLoad = Object.assign({}, this.projectInfo);
+    _.assign(projectPayLoad,{managerID:projectPayLoad.manager.userID});
+    projectPayLoad.manager = null;
+
+    this.projectService.add(projectPayLoad).subscribe((data) =>
+    {
+        console.log("Project Added");
+        console.log(data);
+    });
   }
 
   onRangeInput($event){
     this.ToolTipText = this.projectInfo.priority.toString();
   }
 
-  onSelectClick($event){
-    console.log($event);
+  onIsStartDatEndDateChange(isStartDatEndDate){
+    if(!isStartDatEndDate){
+      _.assign(this.projectInfo,{startDate:null,endDate:null});
+    }
   }
 
   private _filter(name: string): any[] {
