@@ -1,3 +1,3 @@
-<app-add-project></app-add-project>
+<app-add-project (projectAdded)="addedProject($event)"></app-add-project>
 <hr style="border-top: dotted 1px;" />
-<app-projects-list-view></app-projects-list-view>
+<app-projects-list-view [projectList]="projectList"></app-projects-list-view>

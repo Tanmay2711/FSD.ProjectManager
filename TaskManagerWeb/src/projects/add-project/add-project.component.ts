@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
@@ -18,6 +18,8 @@ export class AddProjectComponent implements OnInit {
   userList:Array<any>;
   projectInfo:any;
   ToolTipText: string = "0";
+  @Output() projectAdded = new EventEmitter<any>();
+
   constructor(private userService:UsersService,
     private projectService:ProjectsService) { 
     this.projectInfo = {
@@ -75,6 +77,7 @@ export class AddProjectComponent implements OnInit {
     {
         console.log("Project Added");
         console.log(data);
+        this.projectAdded.emit(data);
     });
   }
 

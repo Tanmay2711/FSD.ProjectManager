@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-projects-list-view',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./projects-list-view.component.css']
 })
 export class ProjectsListViewComponent implements OnInit {
-
+  @Input() projectList: Array<any>
   constructor() { }
 
   ngOnInit() {

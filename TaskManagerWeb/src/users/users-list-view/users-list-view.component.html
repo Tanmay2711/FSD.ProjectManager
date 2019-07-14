@@ -2,20 +2,20 @@
     <table style="width: 100%">
       <tbody>
           <tr>
-              <td style="width: 70%" class="highlightedGray">{{ userInfo.firstName}}</td>
+              <td style="width: 70%" class="highlightedGray largeandboldfont">{{ userInfo.firstName}}</td>
               <td>
                   <a class="btn btn-secondary btn-sm cutombutton" [routerLink]="['/edittask', userInfo.userID]">Edit</a>
               </td>
           </tr>
               
           <tr>
-              <td style="width: 70%;" class="highlightedGray" style="border-top: 10px solid white;">{{ userInfo.lastName}}</td>
+              <td style="width: 70%;" class="highlightedGray largeandboldfont" style="border-top: 10px solid white;">{{ userInfo.lastName}}</td>
               <td>
                   <button class="btn btn-secondary btn-sm cutombutton" (click)="deleteRecord(userInfo)">Delete</button>
               </td>
           </tr>
           <tr>
-              <td style="width: 70%" class="highlightedGray" style="border-top: 10px solid white;">{{ userInfo.employeeID}}</td>
+              <td style="width: 70%" class="highlightedGray largeandboldfont" style="border-top: 10px solid white;">{{ userInfo.employeeID}}</td>
               <td></td>
           </tr>
       </tbody>
