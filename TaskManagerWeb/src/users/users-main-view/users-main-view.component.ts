@@ -25,7 +25,6 @@ export class UsersMainViewComponent implements OnInit {
   userAdded(user:any){
     console.log("Adding user");
     console.log(user);
-    this.userList.push(user);
     this.tempUserList.push(user);
     this.showSearchControls = true;
     this.onKeyUp('');
