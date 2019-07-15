@@ -18,6 +18,7 @@ export class AddProjectComponent implements OnInit {
   userList:Array<any>;
   projectInfo:any;
   ToolTipText: string = "0";
+  isStartDatEndDate:boolean;
   @Output() projectAdded = new EventEmitter<any>();
 
   constructor(private userService:UsersService,
@@ -53,7 +54,7 @@ export class AddProjectComponent implements OnInit {
   }
 
   displayFn(user?: any): string | undefined {
-    return user ? user.firstName + " " + user.lastName : undefined;
+    return user && user.userID > 0 ? user.firstName + " " + user.lastName : '';
   }
 
   //remove this for test only
@@ -78,6 +79,7 @@ export class AddProjectComponent implements OnInit {
         console.log("Project Added");
         console.log(data);
         this.projectAdded.emit(data);
+        this.resetClicked(null);
     });
   }
 
@@ -89,6 +91,20 @@ export class AddProjectComponent implements OnInit {
     if(!isStartDatEndDate){
       _.assign(this.projectInfo,{startDate:null,endDate:null});
     }
+  }
+
+  resetClicked($event){
+    this.projectInfo = {
+      projectID:0,
+      projectName:null,
+      startDate:null,
+      endDate:null,
+      priority:0,
+      managerID:0,
+      manager:null
+    };
+
+    this.isStartDatEndDate = false;
   }
 
   private _filter(name: string): any[] {
