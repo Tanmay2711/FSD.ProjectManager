@@ -101,7 +101,7 @@ export class AddProjectComponent implements OnInit {
       endDate:null,
       priority:0,
       managerID:0,
-      manager:null
+      manager:''
     };
 
     this.isStartDatEndDate = false;

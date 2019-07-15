@@ -1,3 +1,12 @@
 <app-add-project (projectAdded)="addedProject($event)"></app-add-project>
 <hr style="border-top: dotted 1px;" />
+<div *ngIf="showSearchControls==true" class="form-group">
+    <input type="text" style="width: 40%" [(ngModel)]="searchValue" (keyup)="onKeyUp($event)" placeholder="Search..." class="form-control addTaskTextInput"> 
+    <br />
+    <label class="addTaskLables" style="margin-left: 1%">Sort By:</label> 
+    <button style="margin-left: 1%" class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('Start Date')">Start Date</button> 
+    <button style="margin-left: 1%" class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('End Date')">End Date</button>
+    <button style="margin-left: 1%" class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('Priority')">Priority</button>
+    <button style="margin-left: 1%" class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('Completed')">Completed</button>
+</div>
 <app-projects-list-view [projectList]="projectList"></app-projects-list-view>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../projects.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-project-main-view',
@@ -10,12 +11,22 @@ export class ProjectMainViewComponent implements OnInit {
   tempProjectList: Array<any>;
   projectList:Array<any>;
   showSearchControls: boolean;
-
+  searchValue:string = '';
   constructor(private proejctService:ProjectsService) {
 
    }
 
   ngOnInit() {
+    this.refreshTasks();
+  }
+
+  addedProject(project:any){
+    this.tempProjectList.push(project);
+    this.showSearchControls = true;
+    this.onKeyUp('');
+  }
+
+  refreshTasks(){
     this.proejctService.get().subscribe((data : Array<any>) => {
       this.projectList = data;
       this.tempProjectList = data;
@@ -23,17 +34,26 @@ export class ProjectMainViewComponent implements OnInit {
     });
   }
 
-  addedProject(project:any){
-    console.log("Adding project in main view");
-    console.log(project);
-    this.projectList.push(project);
-    //this.tempProjectList.push(project);
-    this.showSearchControls = true;
-    this.onKeyUp('');
+  onKeyUp($event){
+    this.projectList = this._filter();
   }
 
-  onKeyUp(arg0: string) {
-    //throw new Error("Method not implemented.");
+  onSeachBtnClick(trigger){
+    if(trigger === 'Start Date'){
+      this.projectList = _.sortBy(this.projectList, (u) => u.startDate);
+    }else if (trigger === 'End Date'){
+      this.projectList = _.sortBy(this.projectList, (u) => u.endDate);
+    } else if (trigger === 'Priority'){
+      this.projectList = _.sortBy(this.projectList, (u) => u.priority);
+    } else if (trigger === 'Completed'){
+    }
+  }
+
+  _filter() {
+    return this.tempProjectList.filter(
+    project => project.projectName.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+    project.priority.toString().includes(this.searchValue.toLowerCase())
+  );
   }
 
 }
