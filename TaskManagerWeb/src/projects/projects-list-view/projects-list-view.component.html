@@ -5,7 +5,7 @@
             <td style="width: 20%;min-width: 800px;" class="highlightedGray">
             <pre class="largeandboldfont">Project : {{ projectInfo.projectName}}
 
-No of Task : {{projectInfo.tasks ? projectInfo.tasks.length : 0}}         Completed : 0
+No of Task : {{projectInfo.tasks ? projectInfo.tasks.length : 0}}         Completed : {{ projectInfo.completedText }}
 
 Start Date : {{projectInfo.startDate}}        End Date : {{projectInfo.endDate}}
             </pre>

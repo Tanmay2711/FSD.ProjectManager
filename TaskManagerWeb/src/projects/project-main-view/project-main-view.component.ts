@@ -46,6 +46,15 @@ export class ProjectMainViewComponent implements OnInit {
     } else if (trigger === 'Priority'){
       this.projectList = _.sortBy(this.projectList, (u) => u.priority);
     } else if (trigger === 'Completed'){
+
+      let tempList =this.projectList.filter((val) => val.endDate!=null);
+     
+      tempList.sort((a,b)=> {
+        return new Date(a.endDate).getTime() > new Date(b.endDate).getTime() ? 1 : -1;
+      });
+      console.log(tempList);
+      tempList.push(...this.projectList.filter((val) => val.endDate == null));
+      this.projectList = tempList;
     }
   }
 
