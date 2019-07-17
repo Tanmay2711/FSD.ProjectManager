@@ -19,7 +19,7 @@ export class ProjectsListViewComponent implements OnInit,AfterContentChecked {
       let todayDate = new Date();
       this.projectList.forEach((project) => {
         let isCompleted = project.endDate != null && new Date(project.endDate).getTime() <= todayDate.getTime();
-         _.assign(project, {completedText: isCompleted ? "Yes" : "No"});
+         _.assign(project, {completedText: isCompleted ? "Yes" : project.startDate == null ? "Yet to start" : "No"});
       });
     }
   }
