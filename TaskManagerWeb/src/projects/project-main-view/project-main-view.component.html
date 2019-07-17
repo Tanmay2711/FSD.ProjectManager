@@ -1,5 +1,7 @@
 <app-add-project (projectAdded)="addedProject($event)"></app-add-project>
-<hr style="border-top: dotted 1px;" />
+<br/>
+<br/>
+<hr style="border-top: dotted 1px;clear: both" />
 <div *ngIf="showSearchControls==true" class="form-group">
     <input type="text" style="width: 40%" [(ngModel)]="searchValue" (keyup)="onKeyUp($event)" placeholder="Search..." class="form-control addTaskTextInput"> 
     <br />
