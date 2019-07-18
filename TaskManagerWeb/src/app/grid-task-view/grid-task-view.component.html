@@ -11,11 +11,11 @@
   </thead>
   <tbody>
       <tr>
-          <td class="highlightedGray">{{ taskInfo.name}}</td>
-          <td class="highlightedGray whiteThickLeftBorder">{{ taskInfo.parentTaskName }}</td>
-          <td>{{ taskInfo.priority }}</td>
-          <td>{{ taskInfo.startDate | date:'shortDate' }}</td>
-          <td>{{ taskInfo.endDate | date:'shortDate' }}</td>
+          <td class="highlightedGray largeandboldfont">{{ taskInfo.name}}</td>
+          <td class="highlightedGray whiteThickLeftBorder largeandboldfont">{{ taskInfo.parentTaskName }}</td>
+          <td class="largeandboldfont">{{ taskInfo.priority }}</td>
+          <td class="largeandboldfont">{{ taskInfo.startDate | date:'shortDate' }}</td>
+          <td class="largeandboldfont">{{ taskInfo.endDate | date:'shortDate' }}</td>
           <td>
               <!-- <button (click)="editRecord(taskInfo)">Edit</button> -->
               <a class="btn btn-secondary btn-sm cutombutton" [routerLink]="['/edittask', taskInfo.tasksID]">Edit</a>

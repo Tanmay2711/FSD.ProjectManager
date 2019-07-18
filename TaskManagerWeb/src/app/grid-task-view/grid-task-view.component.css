@@ -29,3 +29,8 @@ th
     min-width: 75px;
     max-width: 75px;
 }
+
+.largeandboldfont{
+    font-size: large;
+    font-weight: bold;
+}

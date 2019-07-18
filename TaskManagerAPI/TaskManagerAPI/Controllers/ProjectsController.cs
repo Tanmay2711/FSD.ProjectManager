@@ -24,7 +24,8 @@ namespace TaskManagerAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            return await _context.Projects.ToListAsync();
+            var list = await _context.Projects.Include(p => p.Tasks).ToListAsync();
+            return list;
         }
 
         // GET: api/Projects/5
