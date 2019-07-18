@@ -9,8 +9,8 @@ namespace TaskManagerAPI.Models
     {
         public int ProjectID { get; set; }
         public string ProjectName { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int Priority { get; set; }
 
         public IList<Tasks> Tasks { get; set; }

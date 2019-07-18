@@ -5,6 +5,8 @@ import {map, startWith } from 'rxjs/operators';
 import { TaskService } from '../task.service';
 import * as _ from 'lodash';
 import { Router,ActivatedRoute } from '@angular/router';
+import { ProjectsService } from 'src/projects/projects.service';
+import { UsersService } from 'src/users/users.service';
 
 @Component({
   selector: 'app-add-task',
@@ -22,11 +24,19 @@ export class AddTaskComponent implements OnInit {
   @Input() taskInfo : any
   previousTaskInfo : any
   myControl = new FormControl();
+  projectNameControl = new FormControl();
+  userNameControl = new FormControl();
   options: string[];
+  projectList:Array<any>;
+  userList:Array<any>;
   filteredOptions: Observable<string[]>;
+  filteredProjects:Observable<Array<any>>;
+  filteredUsers:Observable<Array<any>>;
   constructor(taskSer : TaskService,
     private route: ActivatedRoute,
-    ro: Router) { 
+    ro: Router,
+    private projectService:ProjectsService,
+    private usersService:UsersService) { 
     this.taskService = taskSer;
     this.router = ro;
     this.taskInfo = {
@@ -35,7 +45,21 @@ export class AddTaskComponent implements OnInit {
       parentName:undefined,
       startDate:undefined,
       endDate:undefined,
-      priority:0
+      priority:0,
+      project:{
+        projectID:0,
+        projectName:null,
+        startDate:null,
+        endDate:null,
+        priority:0,
+        managerID:0
+      },
+      user:{
+        userId:0,
+        firstName:'',
+        lastName:'',
+        employeeId:0
+      }
     };
 
     let id = this.route.snapshot.paramMap.get('taskId');
@@ -72,8 +96,49 @@ export class AddTaskComponent implements OnInit {
       );
     });
 
+    this.projectService.get().subscribe((data:Array<any>) =>{
+        this.projectList = data;
+        this.filteredProjects = this.projectNameControl.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value.projectName),
+          map(projectName => projectName ? this.filterProjectNames(projectName) : this.projectList.slice())
+        );
+
+    });
+
+    this.usersService.get().subscribe((data:Array<any>) => {
+
+      this.userList = data;
+      this.filteredUsers = this.userNameControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.firstName + ' ' + value.lastName),
+        map(name => name ? this.filterUser(name) : this.userList.slice())
+      );
+    });
 
   }
+  filterProjectNames(projectName: any): any {
+    const filterValue = projectName.toLowerCase();
+
+    return this.projectList.filter(option => option.projectName.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  private filterUser(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.userList.filter(option => option.firstName.toLowerCase().indexOf(filterValue) === 0 || option.lastName.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  projectDisplayFn(project?: any): string | undefined {
+    return project ? project.projectName : '';
+  }
+
+  userDisplayFn(user?: any): string | undefined {
+    return user && user.userID > 0 ? user.firstName + " " + user.lastName : '';
+  }
+
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
@@ -89,7 +154,21 @@ export class AddTaskComponent implements OnInit {
       parentName:undefined,
       startDate:undefined,
       endDate:undefined,
-      priority:0
+      priority:0,
+      project:{
+        projectID:0,
+        projectName:null,
+        startDate:null,
+        endDate:null,
+        priority:0,
+        managerID:0
+      },
+      user:{
+        userId:0,
+        firstName:'',
+        lastName:'',
+        employeeId:0
+      }
     };
   };
 
@@ -113,7 +192,9 @@ export class AddTaskComponent implements OnInit {
         name: this.taskInfo.name,
         startDate: this.taskInfo.startDate,
         endDate: this.taskInfo.endDate,
-        priority: this.taskInfo.priority
+        priority: this.taskInfo.priority,
+        userID:this.taskInfo.user.userID,
+        projectID:this.taskInfo.project.projectID
     };
     if (taskWithId) {
       this.taskService.update(taskPayLoad).subscribe(

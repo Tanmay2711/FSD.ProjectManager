@@ -2,6 +2,17 @@
     <h2></h2>
     <form>
         <div class="form-group">
+            <label for="projectname-input" class="addTaskLables">Project:</label>
+            <input type="text" id="projectname-input" [(ngModel)]="taskInfo.project" class="form-control addTaskTextInput" name="projectname" 
+            matInput [formControl]="projectNameControl" [matAutocomplete]="projectNameAuto"/>
+
+            <mat-autocomplete #projectNameAuto="matAutocomplete" [displayWith]="projectDisplayFn">
+                    <mat-option *ngFor="let option of filteredProjects | async" [value]="option">
+                    {{option.projectName}}
+                    </mat-option>
+            </mat-autocomplete>
+        </div>
+        <div class="form-group">
             <label for="taskname-input" class="addTaskLables">Task:</label>
             <input type="text" id="taskname-input" [(ngModel)]="taskInfo.name" class="form-control addTaskTextInput" name="name" />
         </div>
@@ -37,6 +48,17 @@
             <input type="text" matInput [matDatepicker]="myDatepicker1" id="enddate-input" [(ngModel)]="taskInfo.endDate" name="endDate" class="form-control addTaskTextInput" />
             <mat-datepicker-toggle matSuffix [for]="myDatepicker1"></mat-datepicker-toggle>
             <mat-datepicker #myDatepicker1></mat-datepicker>
+        </div>
+        <div class="form-group">
+                <label for="user-input" class="addTaskLables">User:</label>
+                    <input type="text" id="user-input" name="user" class="form-control addTaskTextInput" 
+                    matInput [formControl]="userNameControl" [matAutocomplete]="userAutoComplete" aria-label="Number" [(ngModel)]="taskInfo.user"/>
+                
+                    <mat-autocomplete #userAutoComplete="matAutocomplete" [displayWith]="userDisplayFn">
+                            <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
+                            {{option.firstName + " " + option.lastName}}
+                            </mat-option>
+                    </mat-autocomplete>
         </div>
         <button type="button" class="btn btn-secondary" (click)="addOrUpdateTaskRecord($event);">{{AddTaskText}}</button>
         <button style="margin-left: 5%" type="button" class="btn btn-secondary" (click)="resetClicked($event)">{{CancelTaskText}}</button>

@@ -1,0 +1,56 @@
+<div class="halfOfScreen">
+  <h2></h2>
+  <form>
+      <div class="form-group">
+          <label for="projectname-input" class="addTaskLables">Project:</label>
+          <input type="text" id="projectname-input" [(ngModel)]="projectInfo.projectName" class="form-control addTaskTextInput" name="projectName" />
+      </div>
+      <div class="form-group">
+        <!-- <label for="startdate-input" class="addTaskLables">Start Date:</label> -->
+        <div *ngIf="isStartDatEndDate">
+          <div style="float: right">
+            <input type="text" placeholder="End Date" matInput [matDatepicker]="myDatepicker1" id="enddate-input" [(ngModel)]="projectInfo.endDate" name="endDate" class="form-control addTaskTextInput" />
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker1"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker1></mat-datepicker>
+          </div>
+
+          <div style="float: right;margin-right: 10px">
+            <input type="text" placeholder="Start Date" matInput [matDatepicker]="myDatepicker" id="startdate-input" [(ngModel)]="projectInfo.startDate" name="startDate" class="form-control addTaskTextInput" />
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+          </div>
+        </div>
+
+        <input type="checkbox" name="isstartdateenddate" id="selectisdate" [(ngModel)]="isStartDatEndDate" (change)="onIsStartDatEndDateChange(isStartDatEndDate)">
+        <label style="margin-left: 10px" class="addTaskLables" for="selectisdate"> Set Start and End Date</label>
+    <!-- </div>
+    <div class="form-group"> -->
+        <!-- <label for="enddate-input" class="addTaskLables">End Date:</label> -->
+        
+      </div>
+      <div style="clear: both" class="form-group">
+          <label for="myRange" class="addTaskLables">Priority:</label>
+          <div>
+            <span style="float: left">0</span>
+            <span style="float: right">30</span>
+          </div>
+          <div class="slidecontainer">
+              <input type="range" min="0" max="30" value="0" matTooltip={{ToolTipText}} matTooltipPosition="after"  [(ngModel)]="projectInfo.priority" (input)="onRangeInput($event)" name="priority" class="slider" id="myRange">
+            </div>
+      </div>
+      <div class="form-group">
+          <label for="manager-input" class="addTaskLables">Manager:</label>
+              <input type="text" id="manager-input" name="manager" class="form-control addTaskTextInput" 
+              matInput [formControl]="myControl" [matAutocomplete]="auto" aria-label="Number" [(ngModel)]="projectInfo.manager" (input)="onManagerInput($event)"/>
+          
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="managerSelected($event)">
+                      <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
+                      {{option.firstName + " " + option.lastName}}
+                      </mat-option>
+              </mat-autocomplete>
+      </div>
+      <button style="float: right" type="button" class="btn btn-secondary" (click)="resetClicked($event)">Reset</button>
+      <button style="float: right;margin-right: 5%;" type="button" class="btn btn-secondary" (click)="addOrUpdateProjectRecord($event);">Add</button>
+
+  </form>
+ </div>

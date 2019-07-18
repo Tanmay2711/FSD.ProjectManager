@@ -1,0 +1,22 @@
+<div class="halfOfScreen">
+  <h2></h2>
+  <form>
+      <div class="form-group">
+          <label for="tfirstname-input" class="addTaskLables">First Name:</label>
+          <input type="text" id="firstname-input" [(ngModel)]="userInfo.firstName" class="form-control addTaskTextInput" name="firstName" />
+      </div>
+      <div class="form-group">
+        <label for="lastname-input" class="addTaskLables">Last Name:</label>
+        <input type="text" id="lastname-input" [(ngModel)]="userInfo.lastName" class="form-control addTaskTextInput" name="lastName" />
+      </div>
+      <div class="form-group">
+        <label for="empId-input" class="addTaskLables">Employee ID:</label>
+        <input type="number" id="empId-input" [(ngModel)]="userInfo.employeeId" class="form-control addTaskTextInput halfWidth" name="employeeId" />
+      </div>
+      <div>
+      <button style="float: right" type="button" class="btn btn-secondary" (click)="resetClicked($event)">Reset</button>
+      <button style="float: right;margin-right: 5%;" type="button" class="btn btn-secondary" (click)="addOrUpdateUserRecord($event);">Add</button>
+    </div>
+
+  </form>
+ </div>

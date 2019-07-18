@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using TaskManagerAPI.Models;
+using Newtonsoft.Json;
 
 namespace TaskManagerAPI
 {
@@ -27,7 +28,9 @@ namespace TaskManagerAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             services.AddDbContext<TaskManagerContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("TaskManagerContext")));
