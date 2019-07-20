@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { UsersService } from 'src/users/users.service';
@@ -20,6 +20,8 @@ export class AddProjectComponent implements OnInit {
   ToolTipText: string = "0";
   isStartDatEndDate:boolean;
   @Output() projectAdded = new EventEmitter<any>();
+  projectForm: any;
+  formSubmitted: boolean;
 
   constructor(private userService:UsersService,
     private projectService:ProjectsService) { 
@@ -30,12 +32,13 @@ export class AddProjectComponent implements OnInit {
       endDate:null,
       priority:0,
       managerID:0,
-      manager:{
-        userId:0,
-        firstName:'',
-        lastName:'',
-        employeeId:0
-      }
+      // manager:{
+      //   userId:0,
+      //   firstName:'',
+      //   lastName:'',
+      //   employeeId:0
+      // }
+      manager:null
     };
   }
   
@@ -51,6 +54,8 @@ export class AddProjectComponent implements OnInit {
           map(name => name ? this._filter(name) : this.userList.slice())
         );
     });
+
+    this.setProjectForm();
   }
 
   displayFn(user?: any): string | undefined {
@@ -68,8 +73,11 @@ export class AddProjectComponent implements OnInit {
     console.log(this.projectInfo);
   }
 
-  addOrUpdateProjectRecord($event){
-    console.log(this.projectInfo);
+  addOrUpdateProjectRecord(){
+    this.formSubmitted = true;
+    if(!this.projectForm.valid){
+      return;
+    }
     let projectPayLoad = Object.assign({}, this.projectInfo);
     _.assign(projectPayLoad,{managerID:projectPayLoad.manager.userID});
     projectPayLoad.manager = null;
@@ -79,8 +87,10 @@ export class AddProjectComponent implements OnInit {
         console.log("Project Added");
         console.log(data);
         this.projectAdded.emit(data);
-        this.resetClicked(null);
+        this.resetClicked();
     });
+
+    this.setProjectForm();
   }
 
   onRangeInput($event){
@@ -93,7 +103,7 @@ export class AddProjectComponent implements OnInit {
     }
   }
 
-  resetClicked($event){
+  resetClicked(){
     this.projectInfo = {
       projectID:0,
       projectName:null,
@@ -105,6 +115,7 @@ export class AddProjectComponent implements OnInit {
     };
 
     this.isStartDatEndDate = false;
+    this.setProjectForm();
   }
 
   private _filter(name: string): any[] {
@@ -112,5 +123,32 @@ export class AddProjectComponent implements OnInit {
 
     return this.userList.filter(option => option.firstName.toLowerCase().indexOf(filterValue) === 0 || option.lastName.toLowerCase().indexOf(filterValue) === 0);
   }
+
+  setProjectForm(){
+    this.formSubmitted = false;
+    this.projectForm = new FormGroup({
+      'projectName':new FormControl(this.projectInfo.projectName,
+        [
+          Validators.required
+        ]
+      ),
+      'managerName':new FormControl(this.projectInfo.manager,
+        [
+          Validators.required
+        ]
+      ),
+      'dateCheckBox':new FormControl(this.isStartDatEndDate,[]),
+      'startDate':new FormControl(this.projectInfo.startDate,[]),
+      'endDate':new FormControl(this.projectInfo.endDate,[]),
+      'priority':new FormControl(this.projectInfo.priority,[])
+    });
+  }
+
+  get projectName(){return this.projectForm.get('projectName');}
+  get managerName(){return this.projectForm.get('managerName');}
+  get dateCheckBox(){return this.projectForm.get('dateCheckBox');}
+  get startDate(){return this.projectForm.get('startDate');}
+  get endDate(){return this.projectForm.get('endDate');}
+  get priority(){return this.projectForm.get('priority');}
 
 }

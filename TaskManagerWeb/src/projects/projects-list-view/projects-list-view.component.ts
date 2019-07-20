@@ -17,7 +17,7 @@ export class ProjectsListViewComponent implements OnInit,AfterContentChecked {
   ngAfterContentChecked() {
     if(this.projectList){
       this.projectList.forEach((project) => {
-        let completedTasks = project.tasks.filter((task) => task.status && task.status.toLowerCase() === 'completed').length;
+        let completedTasks = (project.tasks || []).filter((task) => task.status && task.status.toLowerCase() === 'completed').length;
          _.assign(project, {completedText: completedTasks});
       });
     }
