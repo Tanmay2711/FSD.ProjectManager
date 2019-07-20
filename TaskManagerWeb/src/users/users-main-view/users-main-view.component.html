@@ -5,8 +5,8 @@
 <div *ngIf="showSearchControls==true" class="form-group">
 <input type="text" style="display: inline; width: 30%" [(ngModel)]="searchValue" (keyup)="onKeyUp($event)" placeholder="Search..." class="form-control addTaskTextInput"> 
 <label class="addTaskLables" style="margin-left: 1%">Sort :</label> 
-<button class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('firstName')">First Name</button> 
-<button class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('lastName')">Last Name</button>
-<button class="btn btn-secondary leftMarginButtons" (click)="onSeachBtnClick('id')">ID</button>
+<button class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('firstName')">First Name</button> 
+<button class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('lastName')">Last Name</button>
+<button class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('id')">ID</button>
 </div>
 <app-users-list-view [userList]="userList"></app-users-list-view>

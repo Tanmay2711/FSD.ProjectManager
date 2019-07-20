@@ -28,7 +28,8 @@ export class ViewTaskComponent implements OnInit {
       priorityFrom:'',
       priorityTo:'',
       startDate:'',
-      endDate:''
+      endDate:'',
+      projectName:''
     };
   }
 
@@ -68,6 +69,10 @@ export class ViewTaskComponent implements OnInit {
     && 
     (
       (this.searchModel.endDate || '') === '' || this.searchModel.endDate.getDate() === new Date(task.endDate).getDate()
+    )
+    &&
+    (
+      task.project.projectName.toLowerCase().includes(this.searchModel.projectName.toLowerCase())
     )
     );
   }

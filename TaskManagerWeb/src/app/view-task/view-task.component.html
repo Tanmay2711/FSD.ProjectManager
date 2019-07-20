@@ -1,17 +1,25 @@
 <div>
-  <label class="viewTaskLables">Task : </label><input class="form-control viewTaskTextInput bigTextInput" [formControl]="taskInputControl" [(ngModel)]="searchModel.taskName" (keyup)="onKeyUp($event)" type="text" style="margin-left: 10px" /> 
+  
+  <!-- <label class="viewTaskLables">Task : </label><input class="form-control viewTaskTextInput bigTextInput" [formControl]="taskInputControl" [(ngModel)]="searchModel.taskName" (keyup)="onKeyUp($event)" type="text" style="margin-left: 10px" /> 
   <label class="viewTaskLables" style="margin-left:20px">Parent Task : </label><input style="margin-left: 10px" [formControl]="taskInputControl" [(ngModel)]="searchModel.parentTaskName" (keyup)="onKeyUp($event)" class="form-control viewTaskTextInput bigTextInput" type="text"/>
   <br>
   <br>
   <label class="viewTaskLables">Priority From: </label><input class="form-control viewTaskTextInput smallTextInput" [(ngModel)]="searchModel.priorityFrom" (keyup)="onKeyUp($event)" type="text" style="margin-left: 3px" /> 
-  <label class="viewTaskLables">Priority To: </label><input class="form-control viewTaskTextInput smallTextInput" [(ngModel)]="searchModel.priorityTo" (keyup)="onKeyUp($event)" type="text" style="margin-left: 3px" /> 
+  <label style="margin-left: 10px" class="viewTaskLables">Priority To: </label><input class="form-control viewTaskTextInput smallTextInput" [(ngModel)]="searchModel.priorityTo" (keyup)="onKeyUp($event)" type="text" style="margin-left: 3px" /> 
   <label class="viewTaskLables" style="margin-left: 7%">Start Date: </label><input matInput [matDatepicker]="myDatepicker" [(ngModel)]="searchModel.startDate" (dateInput)="onDateChange('input', $event)" (dateChange)="onDateChange('change', $event)" (blur)="onDateChange('blur', $event)" class="form-control viewTaskTextInput smallTextInput" type="text" style="margin-left: 3px" /> 
   <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
   <mat-datepicker #myDatepicker></mat-datepicker>
   <label class="viewTaskLables">End Date: </label><input matInput [matDatepicker]="myDatepicker1" [(ngModel)]="searchModel.endDate" (dateInput)="onDateChange('input', $event)" (blur)="onDateChange('blur', $event)" class="form-control viewTaskTextInput smallTextInput" type="text" style="margin-left: 3px" /> 
   <mat-datepicker-toggle matSuffix [for]="myDatepicker1"></mat-datepicker-toggle>
   <mat-datepicker #myDatepicker1></mat-datepicker>
-
+  <br/>
+  <br/> -->
+  <label class="viewTaskLables">Project : </label><input class="form-control viewTaskTextInput bigTextInput" [(ngModel)]="searchModel.projectName" (keyup)="onKeyUp($event)" type="text" style="margin-left: 10px" /> 
+  <label class="viewTaskLables" style="margin-left: 1%">Sort Task By:</label> 
+  <button style="margin-left: 1%" class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('Start Date')">Start Date</button> 
+  <button style="margin-left: 1%" class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('End Date')">End Date</button>
+  <button style="margin-left: 1%" class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('Priority')">Priority</button>
+  <button style="margin-left: 1%" class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('Completed')">Completed</button>
   <br>
   <hr style="border-top: dotted 2px;" />
   <app-grid-task-view [taskData]="taskData" (editClicked)="editClicked($event)" (recordDeleted)="deleteClicked($event)"></app-grid-task-view>
