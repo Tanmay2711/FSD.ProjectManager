@@ -77,6 +77,11 @@ export class AddTaskComponent implements OnInit {
       let id = this.route.snapshot.paramMap.get('taskId');
       if(id){
         this.taskService.getById(+id).subscribe((data:any) => {
+            if(data.status && data.status.toLowerCase() === 'completed'){
+              alert("This task is completed and cannot be edited.");
+              this.navigateToViewTask();
+              return;
+            }
             this.taskInfo = data;
             _.assignIn(this.taskInfo,{parentName:this.getParentTaskName(this.taskData,data.parentID) || ''});
             this.previousTaskInfo = Object.assign({},this.taskInfo);

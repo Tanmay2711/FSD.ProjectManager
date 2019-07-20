@@ -28,7 +28,8 @@ export class ViewTaskComponent implements OnInit {
       priorityFrom:'',
       priorityTo:'',
       startDate:'',
-      endDate:''
+      endDate:'',
+      projectName:''
     };
   }
 
@@ -69,12 +70,16 @@ export class ViewTaskComponent implements OnInit {
     (
       (this.searchModel.endDate || '') === '' || this.searchModel.endDate.getDate() === new Date(task.endDate).getDate()
     )
+    &&
+    (
+      task.project.projectName.toLowerCase().includes(this.searchModel.projectName.toLowerCase())
+    )
     );
   }
 
-  deleteClicked(task:any){
-    this.taskService.remove(task).subscribe(() => {
-      this.taskData.splice(this.taskData.indexOf(task),1);
+  endedTask(task:any){
+    Object.assign(task, {status:'completed'});
+    this.taskService.update(task).subscribe(() => {
     });
   }
 
@@ -98,5 +103,20 @@ export class ViewTaskComponent implements OnInit {
 
   onDateChange(type: string, event: MatDatepickerInputEvent<Date>){
     this.taskData = this._filterByTask('');
+  }
+
+  onSeachBtnClick(trigger){
+    if(trigger === 'Start Date'){
+      this.taskData = _.sortBy(this.taskData, (u) => u.startDate);
+    }else if (trigger === 'End Date'){
+      this.taskData = _.sortBy(this.taskData, (u) => u.endDate);
+    } else if (trigger === 'Priority'){
+      this.taskData = _.sortBy(this.taskData, (u) => u.priority);
+    } else if (trigger === 'Completed'){
+      
+      let tempList = _.sortBy(this.taskData.filter((val) => val.status), (u) => u.endDate);   
+      tempList.push(..._.sortBy(this.taskData.filter((val) => val.status == null),(u) => u.tasksID));
+      this.taskData = tempList;
+    }
   }
 }

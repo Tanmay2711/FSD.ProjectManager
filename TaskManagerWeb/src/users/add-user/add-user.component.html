@@ -1,21 +1,59 @@
+<!-- [(ngModel)]="userInfo.firstName"  [(ngModel)]="userInfo.lastName" [(ngModel)]="userInfo.employeeId"
+*ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"-->
 <div class="halfOfScreen">
   <h2></h2>
-  <form>
+  <form [formGroup]="userForm" (ngSubmit)="addOrUpdateUserRecord()">
       <div class="form-group">
-          <label for="tfirstname-input" class="addTaskLables">First Name:</label>
-          <input type="text" id="firstname-input" [(ngModel)]="userInfo.firstName" class="form-control addTaskTextInput" name="firstName" />
+          <label for="firstname-input" class="addTaskLables">First Name:</label>
+          <input type="text" 
+          id="firstname-input" 
+          [(ngModel)]="userInfo.firstName"
+          class="form-control addTaskTextInput" 
+          name="firstName" 
+          formControlName="firstName"
+          required />
+          <div *ngIf="!(firstName.valid || firstName.pristine) || (formSubmitted && firstName.invalid)"
+          class="alert alert-danger">
+            <div *ngIf="firstName.errors.required">
+              First Name is required.
+            </div>
+        </div>
       </div>
       <div class="form-group">
         <label for="lastname-input" class="addTaskLables">Last Name:</label>
-        <input type="text" id="lastname-input" [(ngModel)]="userInfo.lastName" class="form-control addTaskTextInput" name="lastName" />
+        <input type="text" 
+        id="lastname-input"  
+        [(ngModel)]="userInfo.lastName"
+        class="form-control addTaskTextInput" 
+        name="lastName" 
+        formControlName="lastName"
+        required/>
+        <div *ngIf="!(lastName.valid || lastName.pristine) || (formSubmitted && lastName.invalid)"
+        class="alert alert-danger">
+          <div *ngIf="lastName.errors.required">
+            Last Name is required.
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label for="empId-input" class="addTaskLables">Employee ID:</label>
-        <input type="number" id="empId-input" [(ngModel)]="userInfo.employeeId" class="form-control addTaskTextInput halfWidth" name="employeeId" />
+        <input type="number" 
+        id="empId-input"  
+        [(ngModel)]="userInfo.employeeID"
+        class="form-control addTaskTextInput halfWidth" 
+        name="employeeID" 
+        formControlName="employeeID"
+        required/>
+        <div *ngIf="!(employeeID.valid || employeeID.pristine) || (formSubmitted && employeeID.invalid)"
+        class="alert alert-danger halfWidth">
+          <div *ngIf="employeeID.errors.required">
+            Employee ID is required.
+          </div>
+        </div>
       </div>
       <div>
       <button style="float: right" type="button" class="btn btn-secondary" (click)="resetClicked($event)">Reset</button>
-      <button style="float: right;margin-right: 5%;" type="button" class="btn btn-secondary" (click)="addOrUpdateUserRecord($event);">Add</button>
+      <button style="float: right;margin-right: 5%;" type="submit" class="btn btn-secondary">{{addUserButtonText}}</button>
     </div>
 
   </form>

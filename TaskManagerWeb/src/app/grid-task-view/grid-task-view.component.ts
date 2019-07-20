@@ -7,7 +7,7 @@ import * as _ from 'lodash';
   styleUrls: ['./grid-task-view.component.css']
 })
 export class GridTaskViewComponent implements OnInit {
-  @Output() recordDeleted = new EventEmitter<any>();
+  @Output() taskEnded = new EventEmitter<any>();
   @Output() newClicked = new EventEmitter<any>();
   @Output() editClicked = new EventEmitter<any>();
   @Input() taskData :Array<any>
@@ -22,9 +22,9 @@ export class GridTaskViewComponent implements OnInit {
     console.log(this.taskData);
   }
 
-  public deleteRecord(task:any) {
+  public endTask(task:any) {
     console.log(task);
-    this.recordDeleted.emit(task);
+    this.taskEnded.emit(task);
   }
     
   public editRecord(record) {

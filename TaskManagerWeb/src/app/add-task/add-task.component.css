@@ -57,3 +57,7 @@ input.addTaskTextInput
 .example-full-width {
   width: 100%;
 }
+
+input:disabled{
+  opacity: .65;
+}

@@ -10,6 +10,6 @@ export class AppComponent {
   title = 'Project Manager';
   addTaskLinkText : string = "Add Task";
   onActivate(componentRef){
-    this.addTaskLinkText = componentRef.isEditView ? "Edit Task" : "Add Task";
+    //this.addTaskLinkText = componentRef.isEditView ? "Edit Task" : "Add Task";
   }
 }

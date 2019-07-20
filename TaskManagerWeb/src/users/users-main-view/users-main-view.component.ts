@@ -30,6 +30,12 @@ export class UsersMainViewComponent implements OnInit {
     this.onKeyUp('');
   }
 
+  userEdited(user:any){
+    let listUser = this.tempUserList.find(obj => obj.userID === user.userID);
+    Object.assign(listUser, user);
+    this.onKeyUp('');
+  }
+
   refreshUsers(){
     this.userService.get().subscribe((userlist:Array<any>) => {
       this.userList = userlist;
@@ -59,5 +65,4 @@ export class UsersMainViewComponent implements OnInit {
     user.employeeID === +this.searchValue.toLowerCase()
   );
   }
-
 }

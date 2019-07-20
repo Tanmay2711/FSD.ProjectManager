@@ -34,3 +34,8 @@ th
     font-size: large;
     font-weight: bold;
 }
+
+a.disabled{
+    opacity: .65;
+    color: white;
+}
