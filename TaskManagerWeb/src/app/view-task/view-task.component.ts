@@ -104,4 +104,23 @@ export class ViewTaskComponent implements OnInit {
   onDateChange(type: string, event: MatDatepickerInputEvent<Date>){
     this.taskData = this._filterByTask('');
   }
+
+  onSeachBtnClick(trigger){
+    if(trigger === 'Start Date'){
+      this.taskData = _.sortBy(this.taskData, (u) => u.startDate);
+    }else if (trigger === 'End Date'){
+      this.taskData = _.sortBy(this.taskData, (u) => u.endDate);
+    } else if (trigger === 'Priority'){
+      this.taskData = _.sortBy(this.taskData, (u) => u.priority);
+    } else if (trigger === 'Completed'){
+
+      let tempList =this.taskData.filter((val) => val.endDate!=null);
+     
+      tempList.sort((a,b)=> {
+        return new Date(a.endDate).getTime() > new Date(b.endDate).getTime() ? 1 : -1;
+      });
+      tempList.push(...this.taskData.filter((val) => val.endDate == null));
+      this.taskData = tempList;
+    }
+  }
 }
