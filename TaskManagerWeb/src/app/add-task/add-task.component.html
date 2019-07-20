@@ -3,7 +3,7 @@
     <form>
         <div class="form-group">
             <label for="projectname-input" class="addTaskLables">Project:</label>
-            <input type="text" id="projectname-input" [(ngModel)]="taskInfo.project" class="form-control addTaskTextInput" name="projectname" 
+            <input *ngIf="!isEditView;else disabledProjectInput" type="text" id="projectname-input" [(ngModel)]="taskInfo.project" class="form-control addTaskTextInput" name="projectname" 
             matInput [formControl]="projectNameControl" [matAutocomplete]="projectNameAuto"/>
 
             <mat-autocomplete #projectNameAuto="matAutocomplete" [displayWith]="projectDisplayFn">
@@ -11,6 +11,9 @@
                     {{option.projectName}}
                     </mat-option>
             </mat-autocomplete>
+            <ng-template #disabledProjectInput>
+                    <input [disabled]="true" type="text" id="projectname-input" [value]="taskInfo.project.projectName" class="form-control addTaskTextInput" name="projectname" />
+            </ng-template>
         </div>
         <div class="form-group">
             <label for="taskname-input" class="addTaskLables">Task:</label>
@@ -51,7 +54,7 @@
         </div>
         <div class="form-group">
                 <label for="user-input" class="addTaskLables">User:</label>
-                    <input type="text" id="user-input" name="user" class="form-control addTaskTextInput" 
+                    <input *ngIf="!isEditView;else disabledUserInput" type="text" id="user-input" name="user" class="form-control addTaskTextInput" 
                     matInput [formControl]="userNameControl" [matAutocomplete]="userAutoComplete" aria-label="Number" [(ngModel)]="taskInfo.user"/>
                 
                     <mat-autocomplete #userAutoComplete="matAutocomplete" [displayWith]="userDisplayFn">
@@ -59,6 +62,10 @@
                             {{option.firstName + " " + option.lastName}}
                             </mat-option>
                     </mat-autocomplete>
+
+                    <ng-template #disabledUserInput>
+                            <input [disabled]="true" type="text" id="user-input" [value]="taskInfo.user.firstName + ' ' + taskInfo.user.lastName" class="form-control addTaskTextInput" name="username" />
+                    </ng-template>
         </div>
         <button type="button" class="btn btn-secondary" (click)="addOrUpdateTaskRecord($event);">{{AddTaskText}}</button>
         <button style="margin-left: 5%" type="button" class="btn btn-secondary" (click)="resetClicked($event)">{{CancelTaskText}}</button>
