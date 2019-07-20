@@ -49,6 +49,7 @@ export class AddUserComponent implements OnInit {
     if(this.userInfo.userID > 0){
         this.userService.update(userPayLoad).subscribe((userData:any) => {
           console.log("User Updated");
+          this.tempUserInfoForEdit = Object.assign({}, this.userInfo);
           this.editedUser.emit(userPayLoad);
         });
     } else {
