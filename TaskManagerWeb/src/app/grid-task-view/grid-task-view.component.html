@@ -18,10 +18,13 @@
           <td class="largeandboldfont">{{ taskInfo.endDate | date:'shortDate' }}</td>
           <td>
               <!-- <button (click)="editRecord(taskInfo)">Edit</button> -->
-              <a class="btn btn-secondary btn-sm cutombutton" [routerLink]="['/edittask', taskInfo.tasksID]">Edit</a>
+              <a *ngIf="!taskInfo.status;else disabledLink" class="btn btn-secondary btn-sm cutombutton" [routerLink]="['/edittask', taskInfo.tasksID]">Edit</a>
+              <ng-template #disabledLink>
+                    <a class="btn btn-secondary btn-sm cutombutton disabled">Edit</a>
+              </ng-template>             
           </td>
           <td>
-              <button class="btn btn-secondary btn-sm cutombutton" (click)="deleteRecord(taskInfo)">End Task</button>
+              <button [disabled]="taskInfo.status" class="btn btn-secondary btn-sm cutombutton" (click)="endTask(taskInfo)">End Task</button>
           </td>
       </tr>
   </tbody>

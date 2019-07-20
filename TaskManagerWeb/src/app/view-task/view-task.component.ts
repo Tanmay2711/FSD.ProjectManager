@@ -77,9 +77,9 @@ export class ViewTaskComponent implements OnInit {
     );
   }
 
-  deleteClicked(task:any){
-    this.taskService.remove(task).subscribe(() => {
-      this.taskData.splice(this.taskData.indexOf(task),1);
+  endedTask(task:any){
+    Object.assign(task, {status:'completed'});
+    this.taskService.update(task).subscribe(() => {
     });
   }
 
@@ -114,12 +114,12 @@ export class ViewTaskComponent implements OnInit {
       this.taskData = _.sortBy(this.taskData, (u) => u.priority);
     } else if (trigger === 'Completed'){
 
-      let tempList =this.taskData.filter((val) => val.endDate!=null);
+      // this.taskData = _.sortBy(this.taskData, (u) => u.status || 'z');
+      // this.taskData = _.sortBy(this.taskData, (u) => u.endDate);
+      // return;
+      let tempList = _.sortBy(this.taskData.filter((val) => val.status), (u) => u.endDate);
      
-      tempList.sort((a,b)=> {
-        return new Date(a.endDate).getTime() > new Date(b.endDate).getTime() ? 1 : -1;
-      });
-      tempList.push(...this.taskData.filter((val) => val.endDate == null));
+      tempList.push(..._.sortBy(this.taskData.filter((val) => val.status == null),(u) => u.tasksID));
       this.taskData = tempList;
     }
   }

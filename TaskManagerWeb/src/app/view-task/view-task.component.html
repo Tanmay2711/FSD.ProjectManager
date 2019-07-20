@@ -22,5 +22,5 @@
   <button style="margin-left: 1%" class="btn btn-sm btn-secondary leftMarginButtons" (click)="onSeachBtnClick('Completed')">Completed</button>
   <br>
   <hr style="border-top: dotted 2px;" />
-  <app-grid-task-view [taskData]="taskData" (editClicked)="editClicked($event)" (recordDeleted)="deleteClicked($event)"></app-grid-task-view>
+  <app-grid-task-view [taskData]="taskData" (editClicked)="editClicked($event)" (taskEnded)="endedTask($event)"></app-grid-task-view>
 </div>
