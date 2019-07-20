@@ -39,21 +39,21 @@
         <label for="empId-input" class="addTaskLables">Employee ID:</label>
         <input type="number" 
         id="empId-input"  
-        [(ngModel)]="userInfo.employeeId"
+        [(ngModel)]="userInfo.employeeID"
         class="form-control addTaskTextInput halfWidth" 
-        name="employeeId" 
-        formControlName="employeeId"
+        name="employeeID" 
+        formControlName="employeeID"
         required/>
-        <div *ngIf="!(employeeId.valid || employeeId.pristine) || (formSubmitted && employeeId.invalid)"
+        <div *ngIf="!(employeeID.valid || employeeID.pristine) || (formSubmitted && employeeID.invalid)"
         class="alert alert-danger halfWidth">
-          <div *ngIf="employeeId.errors.required">
+          <div *ngIf="employeeID.errors.required">
             Employee ID is required.
           </div>
         </div>
       </div>
       <div>
       <button style="float: right" type="button" class="btn btn-secondary" (click)="resetClicked($event)">Reset</button>
-      <button style="float: right;margin-right: 5%;" type="submit" class="btn btn-secondary">Add</button>
+      <button style="float: right;margin-right: 5%;" type="submit" class="btn btn-secondary">{{addUserButtonText}}</button>
     </div>
 
   </form>

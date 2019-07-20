@@ -4,7 +4,8 @@
           <tr>
               <td style="width: 70%" class="highlightedGray largeandboldfont">{{ userInfo.firstName}}</td>
               <td>
-                  <a class="btn btn-secondary btn-sm cutombutton" [routerLink]="['/edittask', userInfo.userID]">Edit</a>
+                  <button class="btn btn-secondary btn-sm cutombutton" 
+                  (click)="userEditClicked(userInfo)">Edit</button>
               </td>
           </tr>
               

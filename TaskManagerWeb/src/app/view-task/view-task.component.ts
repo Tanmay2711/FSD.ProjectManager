@@ -113,12 +113,8 @@ export class ViewTaskComponent implements OnInit {
     } else if (trigger === 'Priority'){
       this.taskData = _.sortBy(this.taskData, (u) => u.priority);
     } else if (trigger === 'Completed'){
-
-      // this.taskData = _.sortBy(this.taskData, (u) => u.status || 'z');
-      // this.taskData = _.sortBy(this.taskData, (u) => u.endDate);
-      // return;
-      let tempList = _.sortBy(this.taskData.filter((val) => val.status), (u) => u.endDate);
-     
+      
+      let tempList = _.sortBy(this.taskData.filter((val) => val.status), (u) => u.endDate);   
       tempList.push(..._.sortBy(this.taskData.filter((val) => val.status == null),(u) => u.tasksID));
       this.taskData = tempList;
     }
