@@ -21,6 +21,7 @@ export class AddProjectComponent implements OnInit {
   ToolTipText: string = "0";
   isStartDatEndDate:boolean;
   @Output() projectAdded = new EventEmitter<any>();
+  @Output() projectEdited = new EventEmitter<any>();
   isDatesChanged : BehaviorSubject<any>;
   projectForm: any;
   formSubmitted: boolean;
@@ -95,6 +96,13 @@ export class AddProjectComponent implements OnInit {
     _.assign(projectPayLoad,{managerID:projectPayLoad.manager.userID});
     projectPayLoad.manager = null;
 
+    if(projectPayLoad.projectID > 0) {
+      this.projectService.update(projectPayLoad).subscribe((data) => {
+          this.tempProjectInfoForEdit = Object.assign({}, this.projectInfo);
+          this.projectEdited.emit(this.projectInfo);
+      });
+
+    } else {
     this.projectService.add(projectPayLoad).subscribe((data) =>
     {
         console.log("Project Added");
@@ -102,6 +110,7 @@ export class AddProjectComponent implements OnInit {
         this.projectAdded.emit(data);
         this.resetClicked();
     });
+  }
 
     this.setProjectForm();
   }

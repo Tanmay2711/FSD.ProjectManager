@@ -23,7 +23,13 @@ export class ProjectMainViewComponent implements OnInit {
   addedProject(project:any){
     this.tempProjectList.push(project);
     this.showSearchControls = true;
-    this.onKeyUp('');
+    this.onKeyUp();
+  }
+
+  editedProject(project:any){
+    let index = this.tempProjectList.findIndex(p => p.projectID === project.projectID);
+    this.tempProjectList[index] = Object.assign({},project);
+    this.onKeyUp();
   }
 
   refreshTasks(){
@@ -34,7 +40,7 @@ export class ProjectMainViewComponent implements OnInit {
     });
   }
 
-  onKeyUp($event){
+  onKeyUp(){
     this.projectList = this._filter();
   }
 
