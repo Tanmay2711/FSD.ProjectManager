@@ -24,7 +24,7 @@ namespace TaskManagerAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            var list = await _context.Projects.Include(p => p.Tasks).ToListAsync();
+            var list = await _context.Projects.Include(p => p.Tasks).Include(p => p.Manager).ToListAsync();
             return list;
         }
 
@@ -32,7 +32,7 @@ namespace TaskManagerAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.Include(p => p.Manager).FirstAsync(p => p.ProjectID == id);
 
             if (project == null)
             {

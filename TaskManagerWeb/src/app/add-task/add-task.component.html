@@ -1,10 +1,24 @@
+<!-- [formControl]="projectNameControl"  [formControl]="myControl" [formControl]="userNameControl"
+ [ngModelOptions]="{standalone: true}" 
+ [value]="taskInfo.user.firstName + ' ' + taskInfo.user.lastName" 
+ [value]="taskInfo.project.projectName" 
+[value] = "taskInfo.user.firstName + ' ' + taskInfo.user.lastName" -->
 <div class="halfOfScreen">
     <h2></h2>
-    <form>
+    <form [formGroup]="taskformGroup" (ngSubmit)="addOrUpdateTaskRecord()">
         <div class="form-group">
             <label for="projectname-input" class="addTaskLables">Project:</label>
-            <input *ngIf="!isEditView;else disabledProjectInput" type="text" id="projectname-input" [(ngModel)]="taskInfo.project" class="form-control addTaskTextInput" name="projectname" 
-            matInput [formControl]="projectNameControl" [matAutocomplete]="projectNameAuto"/>
+            <input *ngIf="!isEditView;else disabledProjectInput" 
+            type="text" 
+            id="projectname-input" 
+            [(ngModel)]="taskInfo.project" 
+            class="form-control addTaskTextInput" 
+            name="projectname" 
+            matInput 
+            formControlName = "projectName"
+            [matAutocomplete]="projectNameAuto"
+            [formControl]="projectNameControl"
+            required/>
 
             <mat-autocomplete #projectNameAuto="matAutocomplete" [displayWith]="projectDisplayFn">
                     <mat-option *ngFor="let option of filteredProjects | async" [value]="option">
@@ -12,12 +26,38 @@
                     </mat-option>
             </mat-autocomplete>
             <ng-template #disabledProjectInput>
-                    <input [disabled]="true" type="text" id="projectname-input" [value]="taskInfo.project.projectName" class="form-control addTaskTextInput" name="projectname" />
+                    <input [attr.disabled]="true" 
+                    type="text" 
+                    id="projectname-input" 
+                    class="form-control addTaskTextInput"
+                    [value]="taskInfo.project.projectName"
+                    formControlName = "projectName"
+                    name="projectName" />
             </ng-template>
+            <div *ngIf="!isEditView">
+                <div *ngIf="!(projectName.valid || projectName.pristine) || (formSubmitted && projectName.invalid)"
+                class="alert alert-danger">
+                <div *ngIf="projectName.errors.required">
+                    Project Name is required.
+                </div>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="taskname-input" class="addTaskLables">Task:</label>
-            <input type="text" id="taskname-input" [(ngModel)]="taskInfo.name" class="form-control addTaskTextInput" name="name" />
+            <input type="text" 
+            id="taskname-input" 
+            [(ngModel)]="taskInfo.name"          
+            class="form-control addTaskTextInput" 
+            name="name" 
+            formControlName="taskName"
+            required/>
+            <div *ngIf="!(taskName.valid || taskName.pristine) || (formSubmitted && taskName.invalid)"
+            class="alert alert-danger">
+              <div *ngIf="taskName.errors.required">
+                Task Name is required.
+              </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="myRange" class="addTaskLables">Priority:</label>
@@ -26,36 +66,100 @@
               <span style="float: right">30</span>
             </div>
             <div class="slidecontainer">
-                <input type="range" min="0" max="30" value="0" matTooltip={{ToolTipText}} matTooltipPosition="after"  [(ngModel)]="taskInfo.priority" (input)="onRangeInput($event)" name="priority" class="slider" id="myRange">
+                <input type="range" 
+                min="0" 
+                max="30" 
+                value="0"
+                matTooltip={{ToolTipText}} 
+                matTooltipPosition="after"  
+                [(ngModel)]="taskInfo.priority" 
+                (input)="onRangeInput($event)" 
+                name="priority" 
+                class="slider" 
+                id="myRange"
+                formControlName="priority">
               </div>
         </div>
         <div class="form-group">
             <label for="parenttask-input" class="addTaskLables">Parent Task:</label>
-                <input type="text" id="parenttask-input" name="parentName" class="form-control addTaskTextInput" 
-                matInput [formControl]="myControl" [matAutocomplete]="auto" aria-label="Number" [(ngModel)]="taskInfo.parentName"/>
+                <input type="text" 
+                id="parenttask-input" 
+                name="parentName" 
+                class="form-control addTaskTextInput"
+                matInput 
+                [matAutocomplete]="auto" 
+                aria-label="Number" 
+                [(ngModel)]="taskInfo.parentName"
+                formControlName="parentTaskName"
+                required/>
             
                 <mat-autocomplete #auto="matAutocomplete">
                         <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                         {{option}}
                         </mat-option>
                 </mat-autocomplete>
+
+                <div *ngIf="!(parentTaskName.valid || parentTaskName.pristine) || (formSubmitted && parentTaskName.invalid)"
+                class="alert alert-danger">
+                  <div *ngIf="parentTaskName.errors.required">
+                    Parent Task Name is required.
+                  </div>
+                </div>
         </div>
         <div class="form-group">
             <label for="startdate-input" class="addTaskLables">Start Date:</label>
-            <input type="text" matInput [matDatepicker]="myDatepicker" id="startdate-input" [(ngModel)]="taskInfo.startDate" name="startDate" class="form-control addTaskTextInput" />
+            <input type="text" 
+            matInput 
+            [matDatepicker]="myDatepicker" 
+            id="startdate-input" 
+            [(ngModel)]="taskInfo.startDate" 
+            name="startDate" 
+            class="form-control addTaskTextInput" 
+            formControlName="startDate"/>
+
             <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #myDatepicker></mat-datepicker>
+            <div *ngIf="!(startDate.valid || startDate.pristine) || (formSubmitted && startDate.invalid)"
+            class="alert alert-danger">
+              <div *ngIf="startDate.errors.required">
+                Start date is required.
+              </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="enddate-input" class="addTaskLables">End Date:</label>
-            <input type="text" matInput [matDatepicker]="myDatepicker1" id="enddate-input" [(ngModel)]="taskInfo.endDate" name="endDate" class="form-control addTaskTextInput" />
+            <input type="text" 
+            matInput 
+            [matDatepicker]="myDatepicker1" 
+            id="enddate-input" 
+            [(ngModel)]="taskInfo.endDate" 
+            name="endDate" 
+            class="form-control addTaskTextInput" 
+            formControlName="endDate"/>
             <mat-datepicker-toggle matSuffix [for]="myDatepicker1"></mat-datepicker-toggle>
             <mat-datepicker #myDatepicker1></mat-datepicker>
+            <div *ngIf="!(endDate.valid || endDate.pristine) || (formSubmitted && endDate.invalid)"
+            class="alert alert-danger">
+              <div *ngIf="endDate.errors.required">
+                End date is required.
+              </div>
+            </div>
+
         </div>
         <div class="form-group">
                 <label for="user-input" class="addTaskLables">User:</label>
-                    <input *ngIf="!isEditView;else disabledUserInput" type="text" id="user-input" name="user" class="form-control addTaskTextInput" 
-                    matInput [formControl]="userNameControl" [matAutocomplete]="userAutoComplete" aria-label="Number" [(ngModel)]="taskInfo.user"/>
+                    <input *ngIf="!isEditView;else disabledUserInput" 
+                    type="text" 
+                    id="user-input" 
+                    name="user" 
+                    class="form-control addTaskTextInput" 
+                    matInput 
+                    [matAutocomplete]="userAutoComplete" 
+                    aria-label="Number" 
+                    [(ngModel)]="taskInfo.user"
+                    formControlName="userName"
+                    [formControl]="userNameControl"
+                    required/>
                 
                     <mat-autocomplete #userAutoComplete="matAutocomplete" [displayWith]="userDisplayFn">
                             <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
@@ -64,10 +168,24 @@
                     </mat-autocomplete>
 
                     <ng-template #disabledUserInput>
-                            <input [disabled]="true" type="text" id="user-input" [value]="taskInfo.user.firstName + ' ' + taskInfo.user.lastName" class="form-control addTaskTextInput" name="username" />
+                            <input [attr.disabled]="true" 
+                            type="text" 
+                            id="user-input" 
+                            [value] = "taskInfo.user.firstName + ' ' + taskInfo.user.lastName" 
+                            class="form-control addTaskTextInput" 
+                            formControlName="userName"
+                            name="userName" />
                     </ng-template>
+                <div *ngIf="!isEditView">
+                    <div *ngIf="!(userName.valid || userName.pristine) || (formSubmitted && userName.invalid)"
+                    class="alert alert-danger">
+                      <div *ngIf="userName.errors.required">
+                        User Name is required.
+                      </div>
+                    </div>
+                </div>
         </div>
-        <button type="button" class="btn btn-secondary" (click)="addOrUpdateTaskRecord($event);">{{AddTaskText}}</button>
+        <button type="submit" class="btn btn-secondary">{{AddTaskText}}</button>
         <button style="margin-left: 5%" type="button" class="btn btn-secondary" (click)="resetClicked($event)">{{CancelTaskText}}</button>
 
     </form>

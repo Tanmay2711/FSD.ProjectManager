@@ -18,10 +18,10 @@ Start Date : {{projectInfo.startDate}}        End Date : {{projectInfo.endDate}}
               </pre>
             </td>
             <td>
-                <a class="btn btn-secondary btn-sm cutombutton" [routerLink]="['/edittask', projectInfo.projectID]">Update</a>
+                <button class="btn btn-secondary btn-sm cutombutton" (click)="onUpdateProject(projectInfo)">Update</button>
                 <br>
                 <br>
-                <button class="btn btn-secondary btn-sm cutombutton" (click)="deleteRecord(projectInfo)">Suspend</button>
+                <button class="btn btn-secondary btn-sm cutombutton">Suspend</button>
             </td>
         </tr>
     </tbody>

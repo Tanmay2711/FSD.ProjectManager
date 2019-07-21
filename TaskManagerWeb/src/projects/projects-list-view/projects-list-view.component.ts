@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, AfterContentChecked } from '@angular/core';
 import * as _ from 'lodash';
+import { ProjectsService } from '../projects.service';
 
 @Component({
   selector: 'app-projects-list-view',
@@ -8,7 +9,7 @@ import * as _ from 'lodash';
 })
 export class ProjectsListViewComponent implements OnInit,AfterContentChecked {
   @Input() projectList: Array<any>
-  constructor() { }
+  constructor(private projectService:ProjectsService) { }
 
   ngOnInit() {
 
@@ -21,6 +22,10 @@ export class ProjectsListViewComponent implements OnInit,AfterContentChecked {
          _.assign(project, {completedText: completedTasks});
       });
     }
+  }
+
+  onUpdateProject(projectInfo){
+    this.projectService.triggerProjectUpdatedEvent(projectInfo);
   }
 
 }

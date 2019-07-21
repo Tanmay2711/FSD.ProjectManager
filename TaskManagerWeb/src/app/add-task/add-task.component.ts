@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith } from 'rxjs/operators';
 import { TaskService } from '../task.service';
@@ -23,15 +23,16 @@ export class AddTaskComponent implements OnInit {
   ToolTipText: string = "0";
   @Input() taskInfo : any
   previousTaskInfo : any
-  myControl = new FormControl();
-  projectNameControl = new FormControl();
-  userNameControl = new FormControl();
   options: string[];
   projectList:Array<any>;
   userList:Array<any>;
   filteredOptions: Observable<string[]>;
   filteredProjects:Observable<Array<any>>;
   filteredUsers:Observable<Array<any>>;
+  taskformGroup:any
+  formSubmitted:boolean = false
+  projectNameControl = new FormControl()
+  userNameControl = new FormControl()
   constructor(taskSer : TaskService,
     private route: ActivatedRoute,
     ro: Router,
@@ -41,26 +42,18 @@ export class AddTaskComponent implements OnInit {
     this.router = ro;
     this.taskInfo = {
       tasksID: 0,
-      name:undefined,
-      parentName:undefined,
-      startDate:undefined,
-      endDate:undefined,
+      name:null,
+      parentName:null,
+      startDate:null,
+      endDate:null,
       priority:0,
-      project:{
-        projectID:0,
-        projectName:null,
-        startDate:null,
-        endDate:null,
-        priority:0,
-        managerID:0
-      },
-      user:{
-        userId:0,
-        firstName:'',
-        lastName:'',
-        employeeId:0
-      }
+      project:null,
+      user:null
     };
+
+    this.previousTaskInfo = Object.assign({}, this.taskInfo);
+    this.previousTaskInfo.project = '';
+    this.previousTaskInfo.user = '';
 
     let id = this.route.snapshot.paramMap.get('taskId');
     if(id){
@@ -71,6 +64,7 @@ export class AddTaskComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setTaskFormGroup();
     this.taskService.get().subscribe((data: any) => 
     {
       this.taskData = data;
@@ -87,6 +81,7 @@ export class AddTaskComponent implements OnInit {
             this.previousTaskInfo = Object.assign({},this.taskInfo);
             this.isEditView = true;
             this.ToolTipText = this.taskInfo.priority.toString();
+            this.setTaskFormGroup();
         });
         this.isEditView = true;
         this.AddTaskText = "Update";
@@ -94,7 +89,7 @@ export class AddTaskComponent implements OnInit {
       }
 
       this.options = this.taskData.filter(obj => obj.tasksID !== +id).map(obj => obj.name);      
-      this.filteredOptions = this.myControl.valueChanges
+      this.filteredOptions = this.parentTaskName.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filter(value))
@@ -122,7 +117,6 @@ export class AddTaskComponent implements OnInit {
         map(name => name ? this.filterUser(name) : this.userList.slice())
       );
     });
-
   }
   filterProjectNames(projectName: any): any {
     const filterValue = projectName.toLowerCase();
@@ -152,28 +146,15 @@ export class AddTaskComponent implements OnInit {
   }
 
   clearTaskInfo = function() {
-    // Create an empty jogging object
     this.taskInfo = {
       tasksID: 0,
-      name:undefined,
-      parentName:undefined,
-      startDate:undefined,
-      endDate:undefined,
+      name:null,
+      parentName:null,
+      startDate:null,
+      endDate:null,
       priority:0,
-      project:{
-        projectID:0,
-        projectName:null,
-        startDate:null,
-        endDate:null,
-        priority:0,
-        managerID:0
-      },
-      user:{
-        userId:0,
-        firstName:'',
-        lastName:'',
-        employeeId:0
-      }
+      project:null,
+      user:null
     };
   };
 
@@ -187,7 +168,11 @@ export class AddTaskComponent implements OnInit {
   }
 
   public addOrUpdateTaskRecord = function($event) {
-
+    this.formSubmitted = true;
+    if(!this.taskformGroup.valid){
+      console.log(this.taskformGroup);
+      return;
+    }
     let taskWithId,parentTask;
     parentTask = _.find(this.taskData, (el => el.name === this.taskInfo.parentName));
     taskWithId = _.find(this.taskData, (el => el.tasksID === this.taskInfo.tasksID));
@@ -215,21 +200,61 @@ export class AddTaskComponent implements OnInit {
 
       );
     }
+
+    this.setTaskFormGroup();
   }
 
   resetClicked($event){
     if(this.isEditView){
-      this.taskInfo = Object.assign({},this.previousTaskInfo);
-      this.ToolTipText = this.taskInfo.priority.toString();
-      return;
+    this.taskInfo = Object.assign({}, this.previousTaskInfo);
+    }else{
+      this.taskInfo = {
+        tasksID: 0,
+        name:null,
+        parentName:null,
+        startDate:null,
+        endDate:null,
+        priority:0,
+        project:'',
+        user:''
+      };
     }
-
-    this.clearTaskInfo();
     this.ToolTipText = this.taskInfo.priority.toString();
+    this.setTaskFormGroup();
   }
 
   onRangeInput($event){
     this.ToolTipText = this.taskInfo.priority.toString();
   }
 
+  setTaskFormGroup(){
+    this.formSubmitted = false;
+    let projVal = this.taskInfo.project;
+    let userVal = this.taskInfo.user;
+    if(this.isEditView){
+      projVal = (projVal || {}).projectName || '';
+      if(userVal){
+        userVal = userVal.firstName + ' ' + userVal.lastName;
+      }else{
+        userVal = '';
+      }
+    }
+    this.taskformGroup = new FormGroup({
+      'projectName':new FormControl(projVal,[Validators.required]),
+      'taskName': new FormControl(this.taskInfo.name,[Validators.required]),
+      'priority':new FormControl(this.taskInfo.priority,[]),
+      'parentTaskName':new FormControl(this.taskInfo.parentName,[]),
+      'startDate':new FormControl(this.taskInfo.startDate,[Validators.required]),
+      'endDate':new FormControl(this.taskInfo.endDate,[Validators.required]),
+      'userName':new FormControl(userVal,[Validators.required])
+    });
+  }
+
+  get projectName():FormControl{return this.taskformGroup.get('projectName');}
+  get taskName(){return this.taskformGroup.get('taskName');}
+  get priority(){return this.taskformGroup.get('priority');}
+  get parentTaskName():FormControl{return this.taskformGroup.get('parentTaskName');}
+  get startDate(){return this.taskformGroup.get('startDate');}
+  get endDate(){return this.taskformGroup.get('endDate');}
+  get userName():FormControl{return this.taskformGroup.get('userName');}
 }
