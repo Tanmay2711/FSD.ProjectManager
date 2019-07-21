@@ -4,7 +4,7 @@
   <!-- <a href="#">Add Task</a>
   <a href="#" style="margin-left: 30px">View Task</a> -->
   <a routerLink="/addproject" routerLinkActive="active" >Add Project</a>
-  <a routerLink="/addtask" routerLinkActive="active" style="margin-left: 30px">{{addTaskLinkText}}</a>
+  <a [class.active]="isEdit" routerLink="/addtask" routerLinkActive="active" style="margin-left: 30px">{{addTaskLinkText}}</a>
   <a routerLink="/adduser" routerLinkActive="active" style="margin-left: 30px">Add User</a>
   <a routerLink="/viewtask" routerLinkActive="active" style="margin-left: 30px">View Task</a>
   <div style="margin-top: 20px">
