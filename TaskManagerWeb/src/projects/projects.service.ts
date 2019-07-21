@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from './../environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,17 @@ export class ProjectsService {
   private headers: HttpHeaders;
   private accessPointUrl: string = environment.projectServiceUrl;
 
+  private projectUpdatedEventSource = new Subject<any>();
+
+  projectUpdatedEvent$ = this.projectUpdatedEventSource.asObservable();
+
   constructor(private http: HttpClient) 
   { 
     this.headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8'});
+  }
+
+  public triggerProjectUpdatedEvent(project:any){
+    this.projectUpdatedEventSource.next(project);
   }
 
   public get() {

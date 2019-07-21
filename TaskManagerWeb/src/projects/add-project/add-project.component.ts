@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
@@ -17,12 +17,14 @@ export class AddProjectComponent implements OnInit {
   filteredUsers:Observable<Array<any>>;
   userList:Array<any>;
   projectInfo:any;
+  tempProjectInfoForEdit:any
   ToolTipText: string = "0";
   isStartDatEndDate:boolean;
   @Output() projectAdded = new EventEmitter<any>();
+  isDatesChanged : BehaviorSubject<any>;
   projectForm: any;
   formSubmitted: boolean;
-
+  addButtonText:string = "Add"
   constructor(private userService:UsersService,
     private projectService:ProjectsService) { 
     this.projectInfo = {
@@ -32,14 +34,11 @@ export class AddProjectComponent implements OnInit {
       endDate:null,
       priority:0,
       managerID:0,
-      // manager:{
-      //   userId:0,
-      //   firstName:'',
-      //   lastName:'',
-      //   employeeId:0
-      // }
       manager:null
     };
+
+    this.tempProjectInfoForEdit = Object.assign({},this.projectInfo);
+    this.isDatesChanged = new BehaviorSubject<any>(this.projectInfo);
   }
   
 
@@ -56,6 +55,20 @@ export class AddProjectComponent implements OnInit {
     });
 
     this.setProjectForm();
+
+    this.projectService.projectUpdatedEvent$.subscribe((project) => {
+      console.log(project);
+      this.projectInfo = Object.assign({}, project);
+      this.tempProjectInfoForEdit = Object.assign({}, project);
+      this.addButtonText = "Update";
+      this.isDatesChanged.next(project);
+    });
+
+    this.isDatesChanged.subscribe((projectInfo) => {
+      if(projectInfo.startDate || projectInfo.endDate){
+        this.isStartDatEndDate = true;
+      }
+    })
   }
 
   displayFn(user?: any): string | undefined {
@@ -104,17 +117,8 @@ export class AddProjectComponent implements OnInit {
   }
 
   resetClicked(){
-    this.projectInfo = {
-      projectID:0,
-      projectName:null,
-      startDate:null,
-      endDate:null,
-      priority:0,
-      managerID:0,
-      manager:''
-    };
-
-    this.isStartDatEndDate = false;
+    this.projectInfo = Object.assign({},this.tempProjectInfoForEdit);
+    this.isDatesChanged.next(this.projectInfo);
     this.setProjectForm();
   }
 
