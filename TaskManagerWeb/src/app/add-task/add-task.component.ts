@@ -31,6 +31,8 @@ export class AddTaskComponent implements OnInit {
   filteredUsers:Observable<Array<any>>;
   taskformGroup:any
   formSubmitted:boolean = false
+  projectNameControl = new FormControl()
+  userNameControl = new FormControl()
   constructor(taskSer : TaskService,
     private route: ActivatedRoute,
     ro: Router,
@@ -50,6 +52,8 @@ export class AddTaskComponent implements OnInit {
     };
 
     this.previousTaskInfo = Object.assign({}, this.taskInfo);
+    this.previousTaskInfo.project = '';
+    this.previousTaskInfo.user = '';
 
     let id = this.route.snapshot.paramMap.get('taskId');
     if(id){
@@ -94,7 +98,7 @@ export class AddTaskComponent implements OnInit {
 
     this.projectService.get().subscribe((data:Array<any>) =>{
         this.projectList = data;
-        this.filteredProjects = this.projectName.valueChanges
+        this.filteredProjects = this.projectNameControl.valueChanges
         .pipe(
           startWith(''),
           map(value => typeof value === 'string' ? value : value.projectName),
@@ -106,7 +110,7 @@ export class AddTaskComponent implements OnInit {
     this.usersService.get().subscribe((data:Array<any>) => {
 
       this.userList = data;
-      this.filteredUsers = this.userName.valueChanges
+      this.filteredUsers = this.userNameControl.valueChanges
       .pipe(
         startWith(''),
         map(value => typeof value === 'string' ? value : value.firstName + ' ' + value.lastName),
@@ -201,7 +205,20 @@ export class AddTaskComponent implements OnInit {
   }
 
   resetClicked($event){
+    if(this.isEditView){
     this.taskInfo = Object.assign({}, this.previousTaskInfo);
+    }else{
+      this.taskInfo = {
+        tasksID: 0,
+        name:null,
+        parentName:null,
+        startDate:null,
+        endDate:null,
+        priority:0,
+        project:'',
+        user:''
+      };
+    }
     this.ToolTipText = this.taskInfo.priority.toString();
     this.setTaskFormGroup();
   }

@@ -17,6 +17,7 @@
             matInput 
             formControlName = "projectName"
             [matAutocomplete]="projectNameAuto"
+            [formControl]="projectNameControl"
             required/>
 
             <mat-autocomplete #projectNameAuto="matAutocomplete" [displayWith]="projectDisplayFn">
@@ -157,6 +158,7 @@
                     aria-label="Number" 
                     [(ngModel)]="taskInfo.user"
                     formControlName="userName"
+                    [formControl]="userNameControl"
                     required/>
                 
                     <mat-autocomplete #userAutoComplete="matAutocomplete" [displayWith]="userDisplayFn">

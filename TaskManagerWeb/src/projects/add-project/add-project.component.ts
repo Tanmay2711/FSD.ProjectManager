@@ -39,6 +39,7 @@ export class AddProjectComponent implements OnInit {
     };
 
     this.tempProjectInfoForEdit = Object.assign({},this.projectInfo);
+    this.tempProjectInfoForEdit.manager = '';
     this.isDatesChanged = new BehaviorSubject<any>(this.projectInfo);
   }
   
