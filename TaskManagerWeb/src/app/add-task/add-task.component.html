@@ -1,8 +1,3 @@
-<!-- [formControl]="projectNameControl"  [formControl]="myControl" [formControl]="userNameControl"
- [ngModelOptions]="{standalone: true}" 
- [value]="taskInfo.user.firstName + ' ' + taskInfo.user.lastName" 
- [value]="taskInfo.project.projectName" 
-[value] = "taskInfo.user.firstName + ' ' + taskInfo.user.lastName" -->
 <div class="halfOfScreen">
     <h2></h2>
     <form [formGroup]="taskformGroup" (ngSubmit)="addOrUpdateTaskRecord()">
