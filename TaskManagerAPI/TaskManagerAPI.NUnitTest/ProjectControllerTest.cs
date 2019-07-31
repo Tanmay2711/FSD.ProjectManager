@@ -11,36 +11,39 @@ using TaskManagerAPI.Models;
 
 namespace TaskManagerAPI.NUnitTest
 {
-    [TestFixture]
-    public class UserControllerTest
+    public class ProjectControllerTest
     {
         private TaskManagerContext context;
-        private UsersController controller;
+        private ProjectsController controller;
 
-        public static IEnumerable<TestCaseData> TestCaseSourceForPutUser
+        public static IEnumerable<TestCaseData> TestCaseSourceForPutProject
         {
             get
             {
-                yield return new TestCaseData(1, new User
+                yield return new TestCaseData(1, new Project
                 {
-                    EmployeeID = 1,
-                    FirstName = "Tanmay",
-                    LastName = "Vartak",
-                    UserID = 1
+                    ProjectID = 1,
+                    ProjectName = "EY Updated",
+                    Priority = 1,
+                    ManagerID = 1,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(2),
                 });
             }
         }
 
-        public static IEnumerable<TestCaseData> TestCaseSourceForPostUser
+        public static IEnumerable<TestCaseData> TestCaseSourceForPostProject
         {
             get
             {
-                yield return new TestCaseData(new User
+                yield return new TestCaseData(new Project
                 {
-                    EmployeeID = 2,
-                    FirstName = "Rohan",
-                    LastName = "Raut",
-                    UserID = 0
+                    ProjectID = 0,
+                    ProjectName = "Canvas",
+                    Priority = 1,
+                    ManagerID = 1,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(3),
                 });
             }
         }
@@ -124,87 +127,87 @@ namespace TaskManagerAPI.NUnitTest
             this.context.Entry<Tasks>(t3).State = EntityState.Detached;
 
             //setup controller object;
-            this.controller = new UsersController(this.context);
+            this.controller = new ProjectsController(this.context);
         }
 
         [Test, Order(1)]
-        public async Task TestUsersGetUsersApi()
+        public async Task TestUsersGetProjectsApi()
         {
-            var lst = await context.Users.ToListAsync();
-            var res = await this.controller.GetUsers();
-            Assert.IsInstanceOf<ActionResult<IEnumerable<User>>>(res, "Return type must be ActionResult");
+            var lst = await context.Projects.ToListAsync();
+            var res = await this.controller.GetProjects();
+            Assert.IsInstanceOf<ActionResult<IEnumerable<Project>>>(res, "Return type must be ActionResult");
             Assert.IsNotNull(res.Value, "Action result value must not be null");
-            Assert.AreEqual(lst.Count, res.Value.Count(), "Users count should match with the count from Users table");
+            Assert.AreEqual(lst.Count, res.Value.Count(), "Projects count should match with the count from Projects table");
         }
 
         [TestCase(1)]
         [TestCase(2)]
         [Order(2)]
-        public async Task TestUsersGetUsersByIdApi(int userId)
+        public async Task TestProjectsGetProjectsByIdApi(int proectId)
         {
-            var lst = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(userId));
-            var res = await this.controller.GetUser(userId);
-            if (userId == 2)
+            var lst = (await context.Projects.ToListAsync()).Find(t => t.ProjectID.Equals(proectId));
+            var res = await this.controller.GetProject(proectId);
+            if (proectId == 2)
             {
                 Assert.IsInstanceOf<NotFoundResult>(res.Result, "in case of record not found it should return NotFoundResult");
                 return;
             }
-            Assert.IsInstanceOf<ActionResult<User>>(res, "Return type must be ActionResult");
+            Assert.IsInstanceOf<ActionResult<Project>>(res, "Return type must be ActionResult");
             Assert.IsNotNull(res.Value, "Action result value must not be null");
-            Assert.AreEqual(lst.UserID, res.Value.UserID, "Users count should match with the count from Users table");
+            Assert.AreEqual(lst.ProjectID, res.Value.ProjectID, "Projects count should match with the count from Project table");
         }
 
-        [TestCaseSource("TestCaseSourceForPutUser")]
+        [TestCaseSource("TestCaseSourceForPutProject")]
         [Order(3)]
-        public async Task TestUsersPutUserApi(int userId, User user)
+        public async Task TestProjectsPutProjectApi(int projectId, Project project)
         {
-            var res = await this.controller.PutUser(userId, user);
-            var lst = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(user.UserID));
-            if (userId != user.UserID)
+            var res = await this.controller.PutProject(projectId, project);
+            var lst = (await context.Projects.ToListAsync()).Find(t => t.ProjectID.Equals(project.ProjectID));
+            if (projectId != project.ProjectID)
             {
                 Assert.IsInstanceOf<BadRequestResult>(res, "in case of bad request it should return BadRequestResult");
                 return;
             }
 
-            if (userId == user.UserID && lst == null)
+            if (projectId == project.ProjectID && lst == null)
             {
                 Assert.IsInstanceOf<NotFoundResult>(res, "in case of record not found it should return NotFoundResult");
                 return;
             }
 
             Assert.IsInstanceOf<NoContentResult>(res, "Return type must be ActionResult");
-            Assert.AreEqual(user.FirstName, lst.FirstName, "Users propertie should match with the request parameter after successful updates");
+            Assert.AreEqual(project.ProjectName, lst.ProjectName, "Projects propertie should match with the request parameter after successful updates");
         }
 
-        [TestCaseSource("TestCaseSourceForPostUser")]
+        [TestCaseSource("TestCaseSourceForPostProject")]
         [Order(4)]
-        public async Task TestUsersPostUserApi(User user)
+        public async Task TestProjectsPostProjectApi(Project project)
         {
-            var lst = (await context.Users.ToListAsync()).Last();
-            user.UserID = lst.UserID + 1;
-            var res = await this.controller.PostUser(user);
-            lst = (await context.Users.ToListAsync()).Last();
+            var lst = (await context.Projects.ToListAsync()).Last();
+            project.ProjectID = lst.ProjectID + 1;
+            var res = await this.controller.PostProject(project);
+            lst = (await context.Projects.ToListAsync()).Last();
             Assert.IsInstanceOf<CreatedAtActionResult>(res.Result, "Return type must be CreatedAtActionResult");
-            Assert.AreEqual(user.FirstName, lst.FirstName, "Users propertie should match with the request parameter after successful post");
-            Assert.AreEqual((((ObjectResult)res.Result).Value as User).UserID, user.UserID, "UserID should match after sucessfull post");
+            Assert.AreEqual(project.ProjectName, lst.ProjectName, "Projects propertie should match with the request parameter after successful post");
+            Assert.AreEqual((((ObjectResult)res.Result).Value as Project).ProjectID, project.ProjectID, "ProjectID should match after sucessfull post");
         }
 
         [TestCase(1)]
         [TestCase(2)]
         [Order(5)]
-        public async Task TestUsersDeleteApi(int userId)
+        public async Task TestProjectsDeleteApi(int projectId)
         {
-            var lst = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(userId));
-            var res = await this.controller.DeleteUser(userId);
-            var lstAfterDelete = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(userId));
-            if (userId == 2)
+            var lst = (await context.Projects.ToListAsync()).Find(t => t.ProjectID.Equals(projectId));
+            var res = await this.controller.DeleteProject(projectId);
+            var lstAfterDelete = (await context.Projects.ToListAsync()).Find(t => t.ProjectID.Equals(projectId));
+            if (projectId == 2)
             {
                 Assert.IsInstanceOf<NotFoundResult>(res.Result, "in case of record not found it should return NotFoundResult");
                 return;
             }
-            Assert.IsInstanceOf<ActionResult<User>>(res, "Return type must be ActionResult");
+            Assert.IsInstanceOf<ActionResult<Project>>(res, "Return type must be ActionResult");
             Assert.IsNotNull(res.Value, "Action result value must not be null");
-            Assert.AreEqual(lst.UserID, res.Value.UserID, "Users count should match with the count from Users table");
+            Assert.AreEqual(lst.ProjectID, res.Value.ProjectID, "Projects count should match with the count from Projects table");
             Assert.IsNull(lstAfterDelete, "After deletion last retreived object must be null");
         }
     }
