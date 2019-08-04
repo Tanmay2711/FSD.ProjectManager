@@ -32,7 +32,7 @@ namespace TaskManagerAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Tasks>> GetTasks(int id)
         {
-            var tasks = await _context.Tasks.Include(t => t.Project).Include(t => t.User).FirstAsync(t => t.TasksID == id);
+            var tasks = await _context.Tasks.Include(t => t.Project).Include(t => t.User).FirstOrDefaultAsync(t => t.TasksID == id);
 
             if (tasks == null)
             {

@@ -32,7 +32,7 @@ namespace TaskManagerAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var project = await _context.Projects.Include(p => p.Manager).FirstAsync(p => p.ProjectID == id);
+            var project = await _context.Projects.Include(p => p.Manager).FirstOrDefaultAsync(p => p.ProjectID == id);
 
             if (project == null)
             {

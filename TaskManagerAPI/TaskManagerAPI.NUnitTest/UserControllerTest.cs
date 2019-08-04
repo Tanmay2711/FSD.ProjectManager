@@ -1,76 +1,46 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
 using TaskManagerAPI.Controllers;
 using TaskManagerAPI.Models;
 
-namespace Tests
+namespace TaskManagerAPI.NUnitTest
 {
     [TestFixture]
-    public class TaskControllerTest
+    public class UserControllerTest
     {
         private TaskManagerContext context;
-        private TasksController controller;
+        private UsersController controller;
 
-        public static IEnumerable<TestCaseData> TestCaseSourceForPutTask
+        public static IEnumerable<TestCaseData> TestCaseSourceForPutUser
         {
             get
             {
-                yield return new TestCaseData(1, new Tasks
+                yield return new TestCaseData(1, new User
                 {
-                    Name = "Task 2",
-                    TasksID = 1,
-                    ParentID = 2,
-                    EndDate = DateTime.Now.AddDays(3),
-                    Priority = 4,
-                    StartDate = DateTime.Now,
-                    UserID = 1,
-                    ProjectID = 1
-                });
-                yield return new TestCaseData(2, new Tasks
-                {
-                    Name = "Task 1",
-                    TasksID = 3,
-                    ParentID = 0,
-                    EndDate = DateTime.Now.AddDays(6),
-                    Priority = 2,
-                    StartDate = DateTime.Now,
-                    UserID = 1,
-                    ProjectID = 1
-                });
-                yield return new TestCaseData(6, new Tasks
-                {
-                    Name = "Task 1",
-                    TasksID = 6,
-                    ParentID = 0,
-                    EndDate = DateTime.Now.AddDays(6),
-                    Priority = 2,
-                    StartDate = DateTime.Now,
-                    UserID = 1,
-                    ProjectID = 1
+                    EmployeeID = 1,
+                    FirstName = "Tanmay",
+                    LastName = "Vartak",
+                    UserID = 1
                 });
             }
         }
 
-        public static IEnumerable<TestCaseData> TestCaseSourceForPostTask
+        public static IEnumerable<TestCaseData> TestCaseSourceForPostUser
         {
             get
             {
-                yield return new TestCaseData(new Tasks
+                yield return new TestCaseData(new User
                 {
-                    Name = "New Task",
-                    TasksID = 0,
-                    ParentID = 2,
-                    EndDate = DateTime.Now.AddDays(6),
-                    Priority = 20,
-                    StartDate = DateTime.Now,
-                    UserID = 1,
-                    ProjectID = 1
+                    EmployeeID = 2,
+                    FirstName = "Rohan",
+                    LastName = "Raut",
+                    UserID = 0
                 });
             }
         }
@@ -154,91 +124,87 @@ namespace Tests
             this.context.Entry<Tasks>(t3).State = EntityState.Detached;
 
             //setup controller object;
-            this.controller = new TasksController(this.context);
+            this.controller = new UsersController(this.context);
         }
 
-        [Test,Order(1)]
-        public async Task TestTasksGetTasksApi()
+        [Test, Order(1)]
+        public async Task TestUsersGetUsersApi()
         {
-            var lst = await context.Tasks.ToListAsync();
-            var res = await this.controller.GetTasks();
-            Assert.IsInstanceOf<ActionResult<IEnumerable<Tasks>>>(res,"Return type must be ActionResult");
+            var lst = await context.Users.ToListAsync();
+            var res = await this.controller.GetUsers();
+            Assert.IsInstanceOf<ActionResult<IEnumerable<User>>>(res, "Return type must be ActionResult");
             Assert.IsNotNull(res.Value, "Action result value must not be null");
-            Assert.AreEqual(lst.Count, res.Value.Count(), "Tasks count should match with the count from Tasks table");
+            Assert.AreEqual(lst.Count, res.Value.Count(), "Users count should match with the count from Users table");
         }
 
         [TestCase(1)]
         [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(4)]
         [Order(2)]
-        public async Task TestTasksGetTasksByIdApi(int taskId)
+        public async Task TestUsersGetUsersByIdApi(int userId)
         {
-            var lst = (await context.Tasks.ToListAsync()).Find(t => t.TasksID.Equals(taskId));
-            var res = await this.controller.GetTasks(taskId);
-            if(taskId == 4)
+            var lst = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(userId));
+            var res = await this.controller.GetUser(userId);
+            if (userId == 2)
             {
                 Assert.IsInstanceOf<NotFoundResult>(res.Result, "in case of record not found it should return NotFoundResult");
                 return;
             }
-            Assert.IsInstanceOf<ActionResult<Tasks>>(res, "Return type must be ActionResult");
+            Assert.IsInstanceOf<ActionResult<User>>(res, "Return type must be ActionResult");
             Assert.IsNotNull(res.Value, "Action result value must not be null");
-            Assert.AreEqual(lst.TasksID, res.Value.TasksID, "Tasks count should match with the count from Tasks table");
+            Assert.AreEqual(lst.UserID, res.Value.UserID, "Users count should match with the count from Users table");
         }
 
-        [TestCaseSource("TestCaseSourceForPutTask")]
+        [TestCaseSource("TestCaseSourceForPutUser")]
         [Order(3)]
-        public async Task TestTasksPutTaskApi(int taskId, Tasks task)
+        public async Task TestUsersPutUserApi(int userId, User user)
         {
-            var res = await this.controller.PutTasks(taskId, task);
-            var lst = (await context.Tasks.ToListAsync()).Find(t => t.TasksID.Equals(task.TasksID));
-            if (taskId != task.TasksID)
+            var res = await this.controller.PutUser(userId, user);
+            var lst = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(user.UserID));
+            if (userId != user.UserID)
             {
                 Assert.IsInstanceOf<BadRequestResult>(res, "in case of bad request it should return BadRequestResult");
                 return;
             }
 
-            if(taskId == task.TasksID && lst == null)
+            if (userId == user.UserID && lst == null)
             {
                 Assert.IsInstanceOf<NotFoundResult>(res, "in case of record not found it should return NotFoundResult");
                 return;
             }
 
             Assert.IsInstanceOf<NoContentResult>(res, "Return type must be ActionResult");
-            Assert.AreEqual(task.Name, lst.Name, "Tasks propertie should match with the request parameter after successful updates");
+            Assert.AreEqual(user.FirstName, lst.FirstName, "Users propertie should match with the request parameter after successful updates");
         }
 
-        [TestCaseSource("TestCaseSourceForPostTask")]
+        [TestCaseSource("TestCaseSourceForPostUser")]
         [Order(4)]
-        public async Task TestTasksPostTaskApi(Tasks task)
+        public async Task TestUsersPostUserApi(User user)
         {
-            var lst = (await context.Tasks.ToListAsync()).Last();
-            task.TasksID = lst.TasksID + 1;
-            var res = await this.controller.PostTasks(task);
-            lst = (await context.Tasks.ToListAsync()).Last();
+            var lst = (await context.Users.ToListAsync()).Last();
+            user.UserID = lst.UserID + 1;
+            var res = await this.controller.PostUser(user);
+            lst = (await context.Users.ToListAsync()).Last();
             Assert.IsInstanceOf<CreatedAtActionResult>(res.Result, "Return type must be CreatedAtActionResult");
-            Assert.AreEqual(task.Name, lst.Name, "Tasks propertie should match with the request parameter after successful post");
-            Assert.AreEqual((((ObjectResult)res.Result).Value as Tasks).TasksID, task.TasksID, "TaskId should match after sucessfull post");
+            Assert.AreEqual(user.FirstName, lst.FirstName, "Users propertie should match with the request parameter after successful post");
+            Assert.AreEqual((((ObjectResult)res.Result).Value as User).UserID, user.UserID, "UserID should match after sucessfull post");
         }
 
         [TestCase(1)]
         [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(5)]
         [Order(5)]
-        public async Task TestTasksDeleteApi(int taskId)
+        public async Task TestUsersDeleteApi(int userId)
         {
-            var lst = (await context.Tasks.ToListAsync()).Find(t => t.TasksID.Equals(taskId));
-            var res = await this.controller.DeleteTasks(taskId);
-            var lstAfterDelete = (await context.Tasks.ToListAsync()).Find(t => t.TasksID.Equals(taskId));
-            if (taskId == 5)
+            var lst = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(userId));
+            var res = await this.controller.DeleteUser(userId);
+            var lstAfterDelete = (await context.Users.ToListAsync()).Find(t => t.UserID.Equals(userId));
+            if (userId == 2)
             {
                 Assert.IsInstanceOf<NotFoundResult>(res.Result, "in case of record not found it should return NotFoundResult");
                 return;
             }
-            Assert.IsInstanceOf<ActionResult<Tasks>>(res, "Return type must be ActionResult");
+            Assert.IsInstanceOf<ActionResult<User>>(res, "Return type must be ActionResult");
             Assert.IsNotNull(res.Value, "Action result value must not be null");
-            Assert.AreEqual(lst.TasksID, res.Value.TasksID, "Tasks count should match with the count from Tasks table");
+            Assert.AreEqual(lst.UserID, res.Value.UserID, "Users count should match with the count from Users table");
             Assert.IsNull(lstAfterDelete, "After deletion last retreived object must be null");
         }
     }
