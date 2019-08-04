@@ -2,7 +2,7 @@
 *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"-->
 <div class="halfOfScreen">
   <h2></h2>
-  <form [formGroup]="userForm" (ngSubmit)="addOrUpdateUserRecord()">
+  <form [formGroup]="userForm" (ngSubmit)="addOrUpdateUserRecord($event)">
       <div class="form-group">
           <label for="firstname-input" class="addTaskLables">First Name:</label>
           <input type="text" 
