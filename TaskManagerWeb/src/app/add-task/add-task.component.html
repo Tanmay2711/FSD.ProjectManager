@@ -1,6 +1,6 @@
 <div class="halfOfScreen">
     <h2></h2>
-    <form [formGroup]="taskformGroup" (ngSubmit)="addOrUpdateTaskRecord()">
+    <form [formGroup]="taskformGroup" (ngSubmit)="addOrUpdateTaskRecord($event)">
         <div class="form-group">
             <label for="projectname-input" class="addTaskLables">Project:</label>
             <input *ngIf="!isEditView;else disabledProjectInput" 
