@@ -12,7 +12,7 @@ describe('UsersListViewComponent', () => {
   let userServiceSpy:jasmine.SpyObj<UsersService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('UsersService',['triggerUserEditedEvent'])
+    const spy = jasmine.createSpyObj('UsersService',['triggerUserEditedEvent']);
     TestBed.configureTestingModule({
       providers:[
         UsersListViewComponent,
